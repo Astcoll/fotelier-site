@@ -104,6 +104,7 @@
 
   function mode() {
     if (!SDA) { if (mqPin.matches) startFb(); else stopFb(); }
+    strip.setAttribute('data-cur', mqPin.matches ? 'Drag' : 'Choose');
     if (mqPin.matches) {
       lis.forEach(function (li) { li.removeAttribute('aria-current'); });
       if (SDA) s3.removeAttribute('data-look');
@@ -336,18 +337,18 @@
 
   /* ---------- Hover: peek at a look, tilt a framed print ---------- */
   strip.addEventListener('pointerover', function (e) {
-    if (e.pointerType !== 'mouse' || drag) return;
+    if (e.pointerType === 'touch' || e.pointerType === 'pen' || drag) return;
     var li = e.target.closest && e.target.closest('li');
     if (li) setAttr(s3, 'data-peek', li.getAttribute('data-look'));
   });
   strip.addEventListener('pointerleave', function () { s3.removeAttribute('data-peek'); });
   strip.addEventListener('pointerdown', function () { s3.removeAttribute('data-peek'); });
 
-  var mqHover = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  var mqHover = matchMedia('(hover: hover) and (pointer: fine)'); // reduced motion keeps the cursor, without lag
   $$('.mats .frame:not(.f-pick)').forEach(function (fr) {
     var r = null, tx = 0, ty = 0, q = 0;
     function paint() { q = 0; fr.style.transform = 'perspective(700px) rotateX(' + (-ty * 7).toFixed(2) + 'deg) rotateY(' + (tx * 7).toFixed(2) + 'deg)'; }
-    fr.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && mqHover.matches) r = fr.getBoundingClientRect(); });
+    fr.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch' && e.pointerType !== 'pen' && mqHover.matches && mqMo.matches) r = fr.getBoundingClientRect(); });
     fr.addEventListener('pointermove', function (e) {
       if (!r) return;
       tx = (e.clientX - r.left) / r.width - 0.5; ty = (e.clientY - r.top) / r.height - 0.5;
@@ -361,15 +362,16 @@
   function curTick() {
     cq = 0;
     if (want !== word) { word = want; lbl.textContent = word; cur.classList.toggle('on', !!word); } // writes stay in the frame, never in pointer handlers
-    rx += (cx - rx) * 0.28; ry += (cy - ry) * 0.28;
-    gx += (cx - gx) * 0.09; gy += (cy - gy) * 0.09;
+    var k = mqMo.matches ? 0.28 : 1, kg = mqMo.matches ? 0.09 : 1;
+    rx += (cx - rx) * k; ry += (cy - ry) * k;
+    gx += (cx - gx) * kg; gy += (cy - gy) * kg;
     dot.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
     lbl.style.transform = ring.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px)';
     glow.style.transform = 'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px)';
     if (Math.abs(cx - gx) + Math.abs(cy - gy) > 0.5 || want !== word) cq = raf(curTick);
   }
   function curMove(e) {
-    if (e.pointerType !== 'mouse') return;
+    if (e.pointerType === 'touch' || e.pointerType === 'pen') return;
     cx = e.clientX; cy = e.clientY;
     if (!shown) { shown = true; rx = gx = cx; ry = gy = cy; raf(function () { cur.classList.add('vis'); glow.classList.add('vis'); }); }
     if (!cq) cq = raf(curTick);

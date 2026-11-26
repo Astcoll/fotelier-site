@@ -165,7 +165,6 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .hang:hover::after{opacity:1}
 .line:hover .hang:not(:hover) img{filter:brightness(.55)}
 .hang img{transition:filter .3s,translate .3s}
-.hang:hover img{translate:0 -6px}
 
 /* 7 Door */
 .s8 .stg{min-height:100svh;align-items:center;text-align:center;overflow:hidden;overflow:clip}
@@ -200,16 +199,20 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.js .trio,.js .pick{cursor:crosshair}}
 
 /* Hover effects on fine pointers */
-@media (hover:hover) and (prefers-reduced-motion:no-preference){
+@media (hover:hover){
 .print::after{content:"";position:absolute;inset:6px;background:#E9E4DA;opacity:0;pointer-events:none}
 .print:hover::after{animation:redip 1.8s cubic-bezier(.2,.7,.3,1)}
 .easel .ph::after{content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;background:linear-gradient(90deg,transparent calc(33.33% - .5px),rgba(236,233,226,.7) 0 calc(33.33% + .5px),transparent 0 calc(66.67% - .5px),rgba(236,233,226,.7) 0 calc(66.67% + .5px),transparent 0),linear-gradient(transparent calc(33.33% - .5px),rgba(236,233,226,.7) 0 calc(33.33% + .5px),transparent 0 calc(66.67% - .5px),rgba(236,233,226,.7) 0 calc(66.67% + .5px),transparent 0)}
 .easel:hover .ph::after{opacity:1}
+.sheet:hover .ph:not(:hover){filter:sepia(.42) grayscale(0) saturate(1.18) contrast(1.04) brightness(.45) hue-rotate(-4deg)}
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
 .mats .frame:not(.f-pick){transition:transform .2s ease-out}
 .sheet .ph{transition:translate .25s,scale .25s,filter .25s}
-.sheet:hover .ph:not(:hover){filter:sepia(.42) grayscale(0) saturate(1.18) contrast(1.04) brightness(.45) hue-rotate(-4deg)}
 .sheet .ph:hover{scale:1.04;z-index:1}
+.hang:hover img{translate:0 -6px}
 }
+@media (prefers-reduced-motion:reduce){.cur .ring::before,.cur .lbl,.glow,.easel .ph::after{transition:none}}
 @keyframes redip{from{opacity:.96}to{opacity:0}}
 
 /* Custom cursor: viewfinder ring, safelight-red dot, a word for what you can do; the safelight follows you */
@@ -288,11 +291,11 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .s8 .door{animation:shut linear both;animation-timeline:--t8;animation-range:contain 0% contain 55%}
 }
 @media (prefers-reduced-motion:no-preference) and (min-width:1000px) and (min-height:520px){.tray{width:min(1200px,100%,460cqh)}}
-@media (prefers-reduced-motion:no-preference){
 .tmr{display:inline}
 .do .col{animation:roll10 steps(10) 36 both;animation-timeline:scroll(root)}
 .dt .col{animation:roll6 steps(6) 6 both;animation-timeline:scroll(root)}
 .dm .col{animation:roll7 steps(6) 1 both;animation-timeline:scroll(root)}
+@media (prefers-reduced-motion:no-preference){
 .rv{animation:rise linear both;animation-timeline:view();animation-range:entry 10% cover 35%}
 .typed{animation:type steps(44) both;animation-timeline:view();animation-range:entry 40% cover 45%}
 .fl{animation:fly linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
