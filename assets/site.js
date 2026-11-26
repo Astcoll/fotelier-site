@@ -1,5 +1,5 @@
 /* fotelier.app: The Developing Room. No libraries, no storage, no scroll listeners.
-   CSS does the scroll-driven motion; this file adds drag, keys, hold-to-compare, the loupe,
+   CSS does the scroll-driven motion; this file adds look jumps, keys, hold-to-compare, the loupe,
    and a small --p fallback for browsers without animation-timeline. */
 (function () {
   'use strict';
@@ -88,11 +88,8 @@
     $$('.rv,.typed,.fl').forEach(function (el) { io2.observe(el); });
   }
 
-  /* ---------- Film strip ---------- */
+  /* ---------- Looks row: all six on screen; scroll lights them in turn, click or tap jumps ---------- */
   var current = 'a1';
-  function centre(li) { // scroll the strip only, never the page
-    strip.scrollLeft = li.offsetLeft - strip.offsetLeft - (strip.clientWidth - li.offsetWidth) / 2;
-  }
   function selectLook(code) {
     current = code;
     s3.setAttribute('data-look', code);
@@ -101,63 +98,37 @@
       else li.removeAttribute('aria-current');
     });
   }
+  // Pinned: scroll the page to the middle of that look's hold, so prints, highlight and playhead agree.
+  function jumpTo(i) {
+    var g = geo(s3);
+    W.scrollTo({ top: g.top + (0.0548 + 0.1814 * i) * g.range, behavior: mqMo.matches ? 'smooth' : 'auto' });
+  }
 
   function mode() {
     if (!SDA) { if (mqPin.matches) startFb(); else stopFb(); }
-    strip.setAttribute('data-cur', mqPin.matches ? 'Drag' : 'Choose');
-    var bd = d.querySelector('.bc-drag b'); if (bd) bd.textContent = mqPin.matches ? 'Drag the strip' : 'Tap a look';
+    strip.setAttribute('data-cur', mqPin.matches ? 'Jump' : 'Choose');
     if (mqPin.matches) {
       lis.forEach(function (li) { li.removeAttribute('aria-current'); });
       if (SDA) s3.removeAttribute('data-look');
-    } else {
-      selectLook(current);
-      centre(lis[LOOKS.indexOf(current)]);
-    }
+    } else selectLook(current);
     entries(!SDA && mqMo.matches);
   }
 
-  // Pinned: a horizontal drag on the strip moves the window scroll inside the scene,
-  // so dragging and scrolling stay in step. Geometry is read once, on pointerdown.
-  var drag = null, dragTo = 0, dragRaf = 0;
-  strip.addEventListener('pointerdown', function (e) {
-    if (!mqPin.matches || e.button) return;
-    var g = geo(s3);
-    var pitch = lis[1].getBoundingClientRect().left - lis[0].getBoundingClientRect().left;
-    if (!(g.range > 0 && pitch > 0)) return;
-    drag = { id: e.pointerId, x: e.clientX, y: W.pageYOffset, k: g.range / (5.512 * pitch), min: g.top, max: g.top + g.range };
-    try { strip.setPointerCapture(e.pointerId); } catch (err) {}
-    strip.classList.add('drag');
-  });
-  strip.addEventListener('pointermove', function (e) {
-    if (!drag || e.pointerId !== drag.id) return;
-    dragTo = clamp(drag.y - (e.clientX - drag.x) * drag.k, drag.min, drag.max);
-    if (Math.abs(e.clientX - drag.x) > 8) did('drag');
-    if (!dragRaf) dragRaf = raf(function () { dragRaf = 0; W.scrollTo(0, dragTo); });
-  });
-  function endDrag(e) { if (drag && e.pointerId === drag.id) { drag = null; strip.classList.remove('drag'); } }
-  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { strip.addEventListener(t, endDrag); });
-
-  // Static (reduced motion or short screens): tap a frame to crossfade the prints.
   strip.addEventListener('click', function (e) {
-    if (mqPin.matches) return;
     var li = e.target.closest && e.target.closest('li');
-    if (li) { selectLook(li.getAttribute('data-look')); did('drag'); }
+    if (!li) return;
+    did('look');
+    if (mqPin.matches) jumpTo(LOOKS.indexOf(li.getAttribute('data-look')));
+    else selectLook(li.getAttribute('data-look'));
   });
 
   strip.addEventListener('keydown', function (e) {
     var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
     if (!dir) return;
     e.preventDefault();
-    did('drag');
-    if (mqPin.matches) {
-      var g = geo(s3);
-      var next = clamp(Math.round((g.p - 0.0548) / 0.1814) + dir, 0, 5);
-      W.scrollTo({ top: g.top + (0.0548 + 0.1814 * next) * g.range, behavior: 'smooth' });
-    } else {
-      var i = clamp(LOOKS.indexOf(current) + dir, 0, 5);
-      selectLook(LOOKS[i]);
-      centre(lis[i]);
-    }
+    did('look');
+    if (mqPin.matches) jumpTo(clamp(Math.round((geo(s3).p - 0.0548) / 0.1814) + dir, 0, 5));
+    else selectLook(LOOKS[clamp(LOOKS.indexOf(current) + dir, 0, 5)]);
   });
 
   /* ---------- Hold to compare ---------- */
@@ -364,7 +335,7 @@
 
   /* ---------- Hover: peek at a look, tilt a framed print ---------- */
   strip.addEventListener('pointerover', function (e) {
-    if (e.pointerType === 'touch' || e.pointerType === 'pen' || drag) return;
+    if (e.pointerType === 'touch' || e.pointerType === 'pen') return;
     var li = e.target.closest && e.target.closest('li');
     if (li) setAttr(s3, 'data-peek', li.getAttribute('data-look'));
   });
