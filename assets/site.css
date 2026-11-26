@@ -72,6 +72,8 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .s1 .stg{min-height:100svh;align-items:center;text-align:center;overflow:hidden;overflow:clip}
 .halo{position:absolute;left:50%;top:50%;width:90vmin;height:90vmin;margin:-45vmin 0 0 -45vmin;border-radius:50%;background:radial-gradient(circle,rgba(240,80,58,.28) 0,rgba(240,80,58,.08) 40%,rgba(240,80,58,0) 70%);transform:scale(1.15);pointer-events:none}
 .s1 .lg{position:relative;margin:0 0 18px}
+.hprint{position:relative;margin:0 auto 22px;height:min(30svh,300px);aspect-ratio:926/1000;background:#E9E4DA;box-shadow:inset 0 0 0 1px var(--key)}
+.hprint img{display:block;width:100%;height:100%}
 .wm{position:relative;font-size:clamp(3.5rem,.157rem + 13.714vw,12.5rem);line-height:.9;letter-spacing:-.04em;font-variation-settings:"wdth" 100}
 .lede{position:relative;margin:24px auto 0;max-width:30ch;font:500 clamp(1.3rem,1.06rem + 1.05vw,2rem)/1.2 var(--fd)}
 .s1 .cue{position:absolute;bottom:28px;left:0;right:0;margin:0}
@@ -131,8 +133,7 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .s4[data-crop="4"] .easel .ph{clip-path:inset(0 21.875% 0 21.875%)}.s4[data-crop="4"] .crl{transform:translateY(-6em)}
 
 /* 5 Matting room, 6 Contact sheet */
-.flow{max-width:1200px;margin:0 auto;padding:clamp(80px,14vw,180px) var(--gut)}
-.flow+.flow{padding-top:0}
+.flow{max-width:1200px;margin:0 auto;padding:clamp(48px,7vw,96px) var(--gut)}
 .flow h2{margin:0 0 12px}.flow .sub{margin:0 0 48px;max-width:46ch}
 .mats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,42vw),1fr));gap:clamp(16px,3vw,40px);align-items:end}
 .mats figure{margin:0}
@@ -198,6 +199,47 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 /* Cursor on fine pointers (native on touch and reduced motion) */
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.js .trio,.js .pick{cursor:crosshair}}
 
+/* Leader lines: a red thread drawn between rooms, naming the next one */
+.lead{position:relative;height:clamp(96px,16svh,160px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
+.lead::before{content:"";position:absolute;left:50%;top:0;bottom:28px;width:1px;background:var(--ac);transform-origin:top}
+.lead span{font:400 11px/1 var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--t2)}
+
+/* Beacons: a pulsing mark on what you can touch; gone once you have used it */
+.bc{position:absolute;z-index:4;display:none;align-items:center;gap:8px;pointer-events:none;transition:opacity .4s,visibility .4s}
+.js .bc{display:flex}
+.bc i{position:relative;flex:none;width:12px;height:12px;border-radius:50%;background:var(--ac)}
+.bc i::after{content:"";position:absolute;inset:-6px;border:1.5px solid var(--ac);border-radius:50%}
+.bc b{font:500 10px/1 var(--fm);letter-spacing:.16em;text-transform:uppercase;color:var(--tx);background:var(--scrim);padding:6px 8px;white-space:nowrap}
+.trio{position:relative}
+.bc-hold{left:50%;top:50%;transform:translate(-6px,-50%)}
+.bc-drag{left:50%;top:-34px;transform:translateX(-6px)}
+.bc-pick{left:50%;top:42%;transform:translate(-6px,-50%)}
+.loupe.on+.bc-pick,.did-hold .bc-hold,.did-drag .bc-drag,.did-pick .bc-pick{opacity:0;visibility:hidden}
+@keyframes pulse{from{transform:scale(.5);opacity:1}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:no-preference){.bc i::after{animation:pulse 1.6s ease-out infinite}}
+
+/* Room rail (wide desktops) and the hint line: where you are, what to try */
+.rail,.hint{display:none}
+@media (hover:hover) and (min-width:900px){
+.js .hint{display:flex}
+.hint{position:fixed;left:28px;bottom:22px;z-index:15;margin:0;align-items:center;gap:10px;max-width:min(420px,40vw);padding:8px 10px;background:var(--scrim);font:400 11px/1.4 var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--tx);pointer-events:none}
+.hint i{flex:none;width:6px;height:6px;background:var(--ac)}
+}
+@media (hover:hover) and (min-width:1360px){
+.js .rail{display:block}
+.rail{position:fixed;left:32px;top:50%;z-index:15;width:2px;height:min(54svh,520px);margin-top:calc(min(54svh,520px) / -2);background:var(--hl)}
+.rail a{position:absolute;left:-5px;height:44px;margin-top:-22px;display:flex;align-items:center;gap:10px;text-decoration:none;font:400 10px/1 var(--fm);letter-spacing:.14em;text-transform:uppercase;color:var(--t2);white-space:nowrap}
+.rail a::before{content:"";flex:none;width:12px;height:12px;background:var(--bg);box-shadow:inset 0 0 0 1.5px var(--t2)}
+.rail a b{font-weight:400}
+.rail a span{opacity:0;transition:opacity .2s}
+.rail a:hover span,.rail a:focus-visible span,.rail a.now span{opacity:1}
+.rail a.now{color:var(--tx)}
+.rail a.now::before{background:var(--ac);box-shadow:none}
+.rail-fill{position:absolute;left:0;top:0;width:2px;height:100%;background:var(--ac);transform-origin:top;transform:scaleY(0)}
+.rail-head{position:absolute;left:-3px;top:0;width:8px;height:100%;pointer-events:none}
+.rail-head::before{content:"";position:absolute;left:0;top:-4px;width:8px;height:8px;background:var(--tx)}
+}
+
 /* Hover effects on fine pointers */
 @media (hover:hover){
 .print::after{content:"";position:absolute;inset:6px;background:#E9E4DA;opacity:0;pointer-events:none}
@@ -212,7 +254,7 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .sheet .ph:hover{scale:1.04;z-index:1}
 .hang:hover img{translate:0 -6px}
 }
-@media (prefers-reduced-motion:reduce){.cur .ring::before,.cur .lbl,.glow,.easel .ph::after{transition:none}}
+@media (prefers-reduced-motion:reduce){.cur .dot,.cur .lbl,.glow,.easel .ph::after{transition:none}}
 @keyframes redip{from{opacity:.96}to{opacity:0}}
 
 /* Custom cursor: viewfinder ring, safelight-red dot, a word for what you can do; the safelight follows you */
@@ -220,12 +262,16 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .cur{position:fixed;left:0;top:0;z-index:60;pointer-events:none;opacity:0;transition:opacity .25s}
 .cur.vis{opacity:1}
 .cur>span{position:fixed;left:0;top:0}
-.cur .ring{width:34px;height:34px;margin:-17px 0 0 -17px;mix-blend-mode:difference}
-.cur .ring::before{content:"";position:absolute;inset:0;border:1.5px solid var(--tx);transition:transform .3s cubic-bezier(.2,.8,.2,1);clip-path:polygon(0 0,9px 0,9px 1.5px,1.5px 1.5px,1.5px 9px,0 9px,0 0,100% 0,100% 9px,calc(100% - 1.5px) 9px,calc(100% - 1.5px) 1.5px,calc(100% - 9px) 1.5px,calc(100% - 9px) 0,100% 0,100% 100%,calc(100% - 9px) 100%,calc(100% - 9px) calc(100% - 1.5px),calc(100% - 1.5px) calc(100% - 1.5px),calc(100% - 1.5px) calc(100% - 9px),100% calc(100% - 9px),100% 100%,0 100%,0 calc(100% - 9px),1.5px calc(100% - 9px),1.5px calc(100% - 1.5px),9px calc(100% - 1.5px),9px 100%,0 100%)}
-.cur.on .ring::before{transform:scale(1.6) rotate(90deg)}
-.cur.press .ring::before{transform:scale(.7)}
+.cur .cn{width:9px;height:9px;border:0 solid var(--tx);mix-blend-mode:difference}
+.cur .c1{border-width:1.5px 0 0 1.5px}
+.cur .c2{border-width:1.5px 1.5px 0 0;margin-left:-9px}
+.cur .c3{border-width:0 0 1.5px 1.5px;margin-top:-9px}
+.cur .c4{border-width:0 1.5px 1.5px 0;margin:-9px 0 0 -9px}
+.cur .dot{transition:opacity .2s}
+.cur.lock .dot{opacity:0}
+.cc .vf:hover::before{opacity:0}
 .cur .dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--ac)}
-.cur .lbl{margin:26px 0 0 30px;font:500 10px/1 var(--fm);letter-spacing:.16em;text-transform:uppercase;color:var(--tx);mix-blend-mode:difference;white-space:nowrap;opacity:0;transition:opacity .2s}
+.cur .lbl{font:500 10px/1 var(--fm);letter-spacing:.16em;text-transform:uppercase;color:var(--tx);mix-blend-mode:difference;white-space:nowrap;opacity:0;transition:opacity .2s}
 .cur.on .lbl{opacity:1}
 .glow{position:fixed;left:0;top:0;z-index:-1;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;background:radial-gradient(circle,rgba(240,80,58,.14),rgba(240,80,58,.05) 38%,rgba(240,80,58,0) 68%);pointer-events:none;opacity:0;transition:opacity .4s}
 .glow.vis{opacity:1}
@@ -251,6 +297,10 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 @keyframes shut{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
 @keyframes type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
+@keyframes develop{from{opacity:0;filter:brightness(1.7) contrast(.5) sepia(.5)}to{opacity:1;filter:brightness(1) contrast(1) sepia(0)}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes fillY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes ride{from{transform:translateY(0)}to{transform:translateY(100%)}}
 @keyframes bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes agitate{0%,100%{rotate:0deg}12.5%,62.5%{rotate:.5deg}37.5%,87.5%{rotate:-.5deg}}
 @keyframes pull{to{transform:translateX(calc(-100% + 100vw))}}
@@ -275,6 +325,7 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .line{overflow:visible;scroll-snap-type:none;width:max-content;background-attachment:scroll;--ph:min(440px,100cqh - 70px)}
 .scn>.stg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ac);transform-origin:left;animation:bar linear both;animation-range:contain 0% contain 100%}
 .s1>.stg::after{animation-timeline:--t1}.s2>.stg::after{animation-timeline:--t2}.s3>.stg::after{animation-timeline:--t3}.s4>.stg::after{animation-timeline:--t4}.s7>.stg::after{animation-timeline:--t7}.s8>.stg::after{animation-timeline:--t8}
+.s1 .hprint img{animation:develop linear both;animation-timeline:--t1;animation-range:contain 0% contain 75%}
 .s2 .tray{animation:agitate linear both;animation-timeline:--t2;animation-range:contain 0% contain 100%}
 .s7 .line{animation:pull linear both;animation-timeline:--t7;animation-range:contain 0% contain 100%}
 .s7 .hang{animation:sway linear both;animation-timeline:--t7;animation-range:contain 0% contain 100%}
@@ -292,10 +343,15 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 }
 @media (prefers-reduced-motion:no-preference) and (min-width:1000px) and (min-height:520px){.tray{width:min(1200px,100%,460cqh)}}
 .tmr{display:inline}
+.rail-fill{animation:fillY linear both;animation-timeline:scroll(root)}
+.rail-head{animation:ride linear both;animation-timeline:scroll(root)}
 .do .col{animation:roll10 steps(10) 36 both;animation-timeline:scroll(root)}
 .dt .col{animation:roll6 steps(6) 6 both;animation-timeline:scroll(root)}
 .dm .col{animation:roll7 steps(6) 1 both;animation-timeline:scroll(root)}
 @media (prefers-reduced-motion:no-preference){
+.lead{view-timeline:--ld}
+.lead::before{animation:grow linear both;animation-timeline:--ld;animation-range:entry 10% cover 55%}
+.lead span{animation:rise linear both;animation-timeline:--ld;animation-range:entry 40% cover 60%}
 .rv{animation:rise linear both;animation-timeline:view();animation-range:entry 10% cover 35%}
 .typed{animation:type steps(44) both;animation-timeline:view();animation-range:entry 40% cover 45%}
 .fl{animation:fly linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
@@ -321,6 +377,7 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .fb .s4 .easel .ph{transition:clip-path .25s}.fb .s4 .crl{transition:transform .25s}
 .fb .line{overflow:visible;scroll-snap-type:none;width:max-content;background-attachment:scroll;--ph:min(440px,100cqh - 70px);transform:translateX(calc((-100% + 100vw) * var(--p,0)))}
 .fb .scn>.stg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ac);transform-origin:left;transform:scaleX(var(--p,0))}
+.fb .s1 .hprint img{opacity:min(var(--p,1) / .75, 1)}
 .fb .s8 .door{transform:scaleX(min(var(--p,1) / .55, 1))}
 /* Entry fallback (.io): JS adds .in when an element comes into view */
 .io .rv,.io .fl{transition:opacity .7s,transform .7s}

@@ -105,6 +105,7 @@
   function mode() {
     if (!SDA) { if (mqPin.matches) startFb(); else stopFb(); }
     strip.setAttribute('data-cur', mqPin.matches ? 'Drag' : 'Choose');
+    var bd = d.querySelector('.bc-drag b'); if (bd) bd.textContent = mqPin.matches ? 'Drag the strip' : 'Tap a look';
     if (mqPin.matches) {
       lis.forEach(function (li) { li.removeAttribute('aria-current'); });
       if (SDA) s3.removeAttribute('data-look');
@@ -130,6 +131,7 @@
   strip.addEventListener('pointermove', function (e) {
     if (!drag || e.pointerId !== drag.id) return;
     dragTo = clamp(drag.y - (e.clientX - drag.x) * drag.k, drag.min, drag.max);
+    if (Math.abs(e.clientX - drag.x) > 8) did('drag');
     if (!dragRaf) dragRaf = raf(function () { dragRaf = 0; W.scrollTo(0, dragTo); });
   });
   function endDrag(e) { if (drag && e.pointerId === drag.id) { drag = null; strip.classList.remove('drag'); } }
@@ -139,13 +141,14 @@
   strip.addEventListener('click', function (e) {
     if (mqPin.matches) return;
     var li = e.target.closest && e.target.closest('li');
-    if (li) selectLook(li.getAttribute('data-look'));
+    if (li) { selectLook(li.getAttribute('data-look')); did('drag'); }
   });
 
   strip.addEventListener('keydown', function (e) {
     var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
     if (!dir) return;
     e.preventDefault();
+    did('drag');
     if (mqPin.matches) {
       var g = geo(s3);
       var next = clamp(Math.round((g.p - 0.0548) / 0.1814) + dir, 0, 5);
@@ -168,6 +171,7 @@
     holdT = 0;
     if (cmp) return;
     cmp = true;
+    did('hold');
     s3.classList.add('cmp');
     clearTimeout(clearT);
     status.textContent = 'Showing originals'; // unchanged text is not re-announced
@@ -277,7 +281,7 @@
         return 'rgb(' + p[0] + ',' + p[1] + ',' + p[2] + ')';
       } catch (err) { return rgb ? 'rgb(' + rgb + ')' : null; }
     }
-    function apply() { var c = sample(u / g.w, v / g.h); if (c) frame.style.backgroundColor = c; }
+    function apply() { var c = sample(u / g.w, v / g.h); if (c) { frame.style.backgroundColor = c; did('pick'); } }
 
     pick.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') { setup(); at(e); } });
     pick.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch' && !keyFocus()) hide(); });
@@ -323,17 +327,34 @@
     });
   })();
 
-  /* ---------- Header: which room you are in ---------- */
-  var room = d.querySelector('.room');
-  if (room && W.IntersectionObserver) {
+  /* ---------- Where you are: header room, rail, hint ---------- */
+  var room = d.querySelector('.room'), rail = d.querySelector('.rail'), hint = d.querySelector('.hint span');
+  var rooms = $$('[data-room]'), railLinks = rail ? $$('a', rail) : [];
+  if (W.IntersectionObserver) {
     var rio = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
+        if (!e.isIntersecting) return;
         var t = e.target.getAttribute('data-room');
-        if (e.isIntersecting && room.textContent !== t) room.textContent = t;
+        if (room && room.textContent !== t) room.textContent = t;
+        if (hint) hint.textContent = e.target.getAttribute('data-hint') || '';
+        railLinks.forEach(function (a) { a.classList.toggle('now', a.getAttribute('data-to') === t); });
       });
     }, { rootMargin: '-50% 0px -50% 0px' });
-    $$('[data-room]').forEach(function (el) { rio.observe(el); });
+    rooms.forEach(function (el) { rio.observe(el); });
   }
+  // Rail nodes sit where each room starts in the page's scroll, so the playhead meets them on arrival.
+  var placeQ = 0;
+  function placeRail() {
+    placeQ = 0;
+    var H = root.scrollHeight - W.innerHeight;
+    var tops = rooms.map(function (el) { return el.getBoundingClientRect().top + W.pageYOffset; });
+    railLinks.forEach(function (a, i) { a.style.top = (H > 0 ? clamp(tops[i] / H, 0, 1) * 100 : 0).toFixed(2) + '%'; });
+  }
+  if (rail) {
+    placeRail();
+    if (W.ResizeObserver) new ResizeObserver(function () { if (!placeQ) placeQ = raf(placeRail); }).observe(d.body);
+  }
+  var did = function (k) { root.classList.add('did-' + k); };
 
   /* ---------- Hover: peek at a look, tilt a framed print ---------- */
   strip.addEventListener('pointerover', function (e) {
@@ -357,42 +378,64 @@
     fr.addEventListener('pointerleave', function () { r = null; fr.style.transform = ''; });
   });
 
-  /* ---------- Cursor: viewfinder ring, red dot, a word for what you can do; the safelight follows ---------- */
-  var cur = null, ring, dot, lbl, glow, cx = -200, cy = -200, rx = -200, ry = -200, gx = -200, gy = -200, cq = 0, word = '', want = '', shown = false;
+  /* ---------- Cursor: four viewfinder corners and a red dot. Over a link the corners lock onto it;
+     over anything you can use they open up and name the action. The safelight follows behind. ---------- */
+  var cur = null, cns = [], dot, lbl, glow, cx = -200, cy = -200, gx = -200, gy = -200, cq = 0;
+  var P = [[-200, -200], [-200, -200], [-200, -200], [-200, -200]], L = [-200, -200];
+  var word = '', want = '', shown = false, lockEl = null, wantLock = null, press = false;
   function curTick() {
     cq = 0;
-    if (want !== word) { word = want; lbl.textContent = word; cur.classList.toggle('on', !!word); } // writes stay in the frame, never in pointer handlers
-    var k = mqMo.matches ? 0.28 : 1, kg = mqMo.matches ? 0.09 : 1;
-    rx += (cx - rx) * k; ry += (cy - ry) * k;
-    gx += (cx - gx) * kg; gy += (cy - gy) * kg;
+    if (want !== word) { word = want; lbl.textContent = word; cur.classList.toggle('on', !!word); } // writes stay in the frame
+    if (wantLock !== lockEl) { lockEl = wantLock; cur.classList.toggle('lock', !!lockEl); }
+    var k = mqMo.matches ? 0.3 : 1, kg = mqMo.matches ? 0.09 : 1, T, lt, i, moving = false;
+    if (lockEl) {
+      var r = lockEl.getBoundingClientRect(), m = press ? 2 : 6;
+      T = [[r.left - m, r.top - m], [r.right + m, r.top - m], [r.left - m, r.bottom + m], [r.right + m, r.bottom + m]];
+      lt = [r.left - m, r.bottom + m + 8];
+    } else {
+      var sz = press ? 8 : word ? 22 : 14;
+      T = [[cx - sz, cy - sz], [cx + sz, cy - sz], [cx - sz, cy + sz], [cx + sz, cy + sz]];
+      lt = [cx + sz + 10, cy + sz + 4];
+    }
+    for (i = 0; i < 4; i++) {
+      P[i][0] += (T[i][0] - P[i][0]) * k; P[i][1] += (T[i][1] - P[i][1]) * k;
+      if (Math.abs(T[i][0] - P[i][0]) + Math.abs(T[i][1] - P[i][1]) > 0.3) moving = true;
+      cns[i].style.transform = 'translate(' + P[i][0].toFixed(1) + 'px,' + P[i][1].toFixed(1) + 'px)';
+    }
+    L[0] += (lt[0] - L[0]) * k; L[1] += (lt[1] - L[1]) * k;
+    lbl.style.transform = 'translate(' + L[0].toFixed(1) + 'px,' + L[1].toFixed(1) + 'px)';
     dot.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
-    lbl.style.transform = ring.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px)';
+    gx += (cx - gx) * kg; gy += (cy - gy) * kg;
     glow.style.transform = 'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px)';
-    if (Math.abs(cx - gx) + Math.abs(cy - gy) > 0.5 || want !== word) cq = raf(curTick);
+    if (moving || lockEl || Math.abs(cx - gx) + Math.abs(cy - gy) > 0.5 || want !== word) cq = raf(curTick);
   }
   function curMove(e) {
     if (e.pointerType === 'touch' || e.pointerType === 'pen') return;
     cx = e.clientX; cy = e.clientY;
-    if (!shown) { shown = true; rx = gx = cx; ry = gy = cy; raf(function () { cur.classList.add('vis'); glow.classList.add('vis'); }); }
+    if (!shown) {
+      shown = true; gx = cx; gy = cy; L = [cx, cy];
+      P = [[cx, cy], [cx, cy], [cx, cy], [cx, cy]];
+      raf(function () { cur.classList.add('vis'); glow.classList.add('vis'); });
+    }
     if (!cq) cq = raf(curTick);
   }
   function curOver(e) {
     var t = e.target, el = t.closest && t.closest('[data-cur],a');
-    var w = !el ? '' : el.getAttribute('data-cur') || (/^mailto:/.test(el.getAttribute('href') || '') ? 'Write' : 'Open');
-    want = w;
+    want = !el ? '' : el.getAttribute('data-cur') || (/^mailto:/.test(el.getAttribute('href') || '') ? 'Write' : 'Open');
+    wantLock = el && el.tagName === 'A' ? el : null;
     if (!cq) cq = raf(curTick);
   }
-  function curHide(e) { if (!e.relatedTarget) { shown = false; cur.classList.remove('vis'); glow.classList.remove('vis'); } }
-  function curDown() { raf(function () { cur.classList.add('press'); }); }
-  function curUp() { raf(function () { cur.classList.remove('press'); }); }
+  function curHide(e) { if (!e.relatedTarget) { shown = false; wantLock = null; cur.classList.remove('vis'); glow.classList.remove('vis'); } }
+  function curDown() { press = true; if (!cq) cq = raf(curTick); }
+  function curUp() { press = false; if (!cq) cq = raf(curTick); }
   function cursor() {
     var on = mqHover.matches;
     if (on && !cur) {
       cur = d.createElement('div'); cur.className = 'cur'; cur.setAttribute('aria-hidden', 'true');
-      ring = d.createElement('span'); ring.className = 'ring';
+      for (var i = 1; i <= 4; i++) { var c = d.createElement('span'); c.className = 'cn c' + i; cns.push(c); cur.appendChild(c); }
       dot = d.createElement('span'); dot.className = 'dot';
       lbl = d.createElement('span'); lbl.className = 'lbl';
-      cur.appendChild(ring); cur.appendChild(dot); cur.appendChild(lbl);
+      cur.appendChild(dot); cur.appendChild(lbl);
       glow = d.createElement('div'); glow.className = 'glow'; glow.setAttribute('aria-hidden', 'true');
       d.body.appendChild(glow); d.body.appendChild(cur);
     }
