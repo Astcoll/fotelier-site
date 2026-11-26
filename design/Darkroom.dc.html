@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fotelier v4 the developing room</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&amp;family=Geist:wght@400;500&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#0D0D0C}
+.dr{--p0:0}.dr a{color:#ECE9E2}.dr a:focus-visible,.dr [tabindex]:focus-visible{outline:2px solid #ECE9E2;outline-offset:4px}
+.vf{position:relative;display:inline-block;padding:14px 18px;text-decoration:none}.vf::before,.vf::after{content:"";position:absolute;inset:0;border:2px solid #F0503A;opacity:0;transition:opacity .2s, inset .25s;clip-path:polygon(0 0,18px 0,18px 2px,2px 2px,2px 18px,0 18px,0 0,100% 0,100% 18px,calc(100% - 2px) 18px,calc(100% - 2px) 2px,calc(100% - 18px) 2px,calc(100% - 18px) 0,100% 0,100% 100%,calc(100% - 18px) 100%,calc(100% - 18px) calc(100% - 2px),calc(100% - 2px) calc(100% - 2px),calc(100% - 2px) calc(100% - 18px),100% calc(100% - 18px),100% 100%,0 100%,0 calc(100% - 18px),2px calc(100% - 18px),2px calc(100% - 2px),18px calc(100% - 2px),18px 100%,0 100%)}.vf:hover::before,.vf:focus-visible::before{opacity:1;inset:-6px}
+.scn{position:relative}.stg{position:sticky;top:0;height:100svh;overflow:clip;display:flex;flex-direction:column;justify-content:center}
+.lk{filter:sepia(.42) grayscale(0) saturate(1.18) contrast(1.04) brightness(1.01) hue-rotate(-4deg)}.cmp .lk{filter:none!important;animation:none!important}
+.paper{opacity:0}.strip{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory}.blade{display:none}.typed{width:auto}.door{display:none}
+@keyframes wid{from{font-variation-settings:"wdth" 75}to{font-variation-settings:"wdth" 100}}@keyframes glow{from{opacity:.25;transform:scale(.7)}to{opacity:1;transform:scale(1.15)}}
+@keyframes dev{0%{opacity:1}70%,100%{opacity:0}}@keyframes devimg{0%{transform:scale(.985)}100%{transform:scale(1)}}
+@keyframes looks{0%,10%{filter:sepia(0) grayscale(0) saturate(1) contrast(1) brightness(1) hue-rotate(0deg)}20%,28%{filter:sepia(.42) grayscale(0) saturate(1.18) contrast(1.04) brightness(1.01) hue-rotate(-4deg)}38%,46%{filter:sepia(0) grayscale(1) saturate(1) contrast(1.2) brightness(1) hue-rotate(0deg)}56%,64%{filter:sepia(.06) grayscale(0) saturate(.6) contrast(.72) brightness(1.1) hue-rotate(0deg)}74%,82%{filter:sepia(0) grayscale(0) saturate(1.8) contrast(1.22) brightness(.97) hue-rotate(0deg)}92%,100%{filter:sepia(.35) grayscale(0) saturate(.85) contrast(1.05) brightness(1.02) hue-rotate(175deg)}}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(calc(-100% + 100vw))}}
+@keyframes easel{0%,14%{clip-path:inset(0 10% 0 10%)}22%,34%{clip-path:inset(0 12.5% 0 12.5%)}42%,54%{clip-path:inset(10% 0 10% 0)}62%,74%{clip-path:inset(24% 0 24% 0)}82%,100%{clip-path:inset(0 27.9% 0 27.9%)}}
+@keyframes crlab{0%{transform:translateY(0)}14%{transform:translateY(0)}22%,34%{transform:translateY(-1.5em)}42%,54%{transform:translateY(-3em)}62%,74%{transform:translateY(-4.5em)}82%,100%{transform:translateY(-6em)}}
+@keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}@keyframes type{from{width:0}to{width:48ch}}@keyframes fly{from{opacity:0;transform:translate(var(--dx),120px) rotate(var(--rot))}to{opacity:1;transform:none}}@keyframes shut{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference){
+.s1{height:180svh;view-timeline:--t1}.s1 .wm{animation:wid linear both;animation-timeline:--t1;animation-range:contain 0% contain 80%}.s1 .halo{animation:glow linear both;animation-timeline:--t1;animation-range:contain 0% contain 90%}
+.s2{height:320svh;view-timeline:--t2}.s2 .paper{opacity:1;animation:dev linear both;animation-timeline:--t2;animation-range:contain 0% contain 70%}.s2 .lk{animation:devimg linear both;animation-timeline:--t2;animation-range:contain 0% contain 70%}
+.s3{height:420svh;view-timeline:--t3}.s3 .lk,.s3 .lk2{animation:looks linear both;animation-timeline:--t3;animation-range:contain 0% contain 100%}.s3 .strip{overflow:visible;animation:slide linear both;animation-timeline:--t3;animation-range:contain 0% contain 100%}
+.s4{height:300svh;view-timeline:--t4}.s4 .crop{animation:easel linear both;animation-timeline:--t4;animation-range:contain 0% contain 100%}.s4 .crl{animation:crlab linear both;animation-timeline:--t4;animation-range:contain 0% contain 100%}
+.rv{animation:rise linear both;animation-timeline:view();animation-range:entry 10% cover 35%}.typed{width:0;animation:type steps(48) both;animation-timeline:view();animation-range:entry 40% cover 45%}.fl{animation:fly linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
+.s8{height:220svh;view-timeline:--t8}.door{display:block;animation:shut linear both;animation-timeline:--t8;animation-range:contain 0% contain 55%}
+}}
+@media (prefers-reduced-motion:reduce){.vf::before{transition:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+</style>
+</helmet>
+<div class="{{ rootClass }}" style="background: #0D0D0C; color: #ECE9E2; font-family: Geist, system-ui, sans-serif; font-size: clamp(1rem, 0.93rem + 0.29vw, 1.1875rem); line-height: 1.6">
+
+<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: 18px clamp(16px, 4vw, 40px); mix-blend-mode: difference">
+<a href="#top" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.03em; text-decoration: none; color: #ECE9E2; padding: 10px 0">fotel<span style="position: relative">ı<span aria-hidden="true" style="position: absolute; left: 50%; top: 0.08em; width: 0.2em; height: 0.2em; transform: translateX(-50%); background: #F0503A"></span></span>er</a>
+<a class="vf" href="#invite" style="font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #ECE9E2">Beta · Dec</a>
+</header>
+
+<main>
+<section id="top" class="scn s1">
+<div class="stg" style="align-items: center; text-align: center; padding: 0 16px">
+<div class="halo" aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 90vmin; height: 90vmin; margin: -45vmin 0 0 -45vmin; border-radius: 50%; background: radial-gradient(circle, rgba(240,80,58,.28) 0, rgba(240,80,58,.08) 40%, rgba(240,80,58,0) 70%)"></div>
+<p style="position: relative; margin: 0 0 18px; font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #A3A099">Darkroom open · an iPhone photo editor</p>
+<h1 class="wm" style="position: relative; margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(3.5rem, 0.157rem + 13.714vw, 12.5rem); line-height: 0.9; letter-spacing: -0.04em; font-variation-settings: 'wdth' 100">fotelier</h1>
+<p style="position: relative; margin: 24px auto 0; max-width: 30ch; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; font-size: clamp(1.3rem, 1.06rem + 1.05vw, 2rem); line-height: 1.2">One look for the whole set.</p>
+<p aria-hidden="true" style="position: absolute; bottom: 28px; left: 0; right: 0; margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #A3A099">Scroll to develop ↓</p>
+</div>
+</section>
+
+<section class="scn s2" aria-labelledby="s2h">
+<div class="stg" style="padding: 72px clamp(16px, 4vw, 40px) 24px; gap: 28px">
+<div style="max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+<h2 id="s2h" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(1.75rem, 1.1rem + 2.667vw, 3.5rem); line-height: 1; letter-spacing: -0.03em; max-width: 16ch">The whole tray develops at once.</h2>
+<p style="margin: 0; max-width: 34ch; color: #A3A099">One edit, every photo in the set. That's batch editing in Fotelier.</p>
+</div>
+<div style="max-width: 1200px; width: 100%; margin: 0 auto; background: #191917; padding: clamp(12px, 2.5vw, 28px); display: grid; grid-template-columns: repeat(auto-fit, minmax(clamp(90px, 22vw, 170px), 1fr)); gap: clamp(8px, 1.6vw, 18px); box-shadow: inset 0 0 0 1px #2E2D2A">
+<sc-for list="{{ prints }}" as="p" hint-placeholder-count="6">
+<figure style="margin: 0; position: relative; padding: 6px; box-shadow: inset 0 0 0 1px rgba(236,233,226,.5)">
+<div class="lk" style="{{ p.scene }}; aspect-ratio: 4 / 5"><div style="{{ p.sun }}"></div><div style="{{ p.land }}"></div></div>
+<div class="paper" aria-hidden="true" style="position: absolute; inset: 6px; background: #E9E4DA"></div>
+</figure>
+</sc-for>
+</div>
+<p style="margin: 0 auto; font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #A3A099">Tray 01 · 6 prints · developing</p>
+</div>
+</section>
+
+<section class="scn s3" aria-labelledby="s3h">
+<div class="stg" style="padding: 72px 0 24px; gap: 24px">
+<div style="padding: 0 clamp(16px, 4vw, 40px); max-width: 1200px; width: 100%; box-sizing: border-box; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+<h2 id="s3h" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(1.75rem, 1.1rem + 2.667vw, 3.5rem); line-height: 1; letter-spacing: -0.03em; max-width: 17ch">Pull a new look through. Every print follows.</h2>
+<p style="margin: 0; max-width: 36ch; color: #A3A099">Fotelier has 30 film looks in 6 groups. The looks here are a demo. Hold a print to see the original.</p>
+</div>
+<div onPointerDown="{{ holdStart }}" onPointerUp="{{ holdEnd }}" onPointerLeave="{{ holdEnd }}" onPointerCancel="{{ holdEnd }}" onContextMenu="{{ noMenu }}" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, 1.6vw, 18px); width: min(760px, calc(100% - 32px)); margin: 0 auto; -webkit-touch-callout: none; user-select: none; touch-action: pan-y">
+<sc-for list="{{ trio }}" as="p" hint-placeholder-count="3">
+<div style="background: #191917; padding: 8px; box-shadow: inset 0 0 0 1px rgba(236,233,226,.5)"><div class="lk2 lk" style="{{ p.scene }}; aspect-ratio: 4 / 5"><div style="{{ p.sun }}"></div><div style="{{ p.land }}"></div></div></div>
+</sc-for>
+</div>
+<div style="position: relative">
+<div aria-hidden="true" style="position: absolute; left: 50%; top: -10px; bottom: -10px; width: 2px; background: #F0503A; z-index: 2"></div>
+<ol class="strip" aria-label="Film looks" style="list-style: none; margin: 0; padding: 18px 0 18px 50vw; background: #1B1A18; background-image: radial-gradient(circle, #0D0D0C 0 3px, transparent 3.5px), radial-gradient(circle, #0D0D0C 0 3px, transparent 3.5px); background-size: 18px 10px, 18px 10px; background-repeat: repeat-x; background-position: 0 4px, 0 calc(100% - 4px); width: max-content">
+<sc-for list="{{ looks }}" as="l" hint-placeholder-count="6">
+<li style="width: clamp(120px, 22vw, 220px); margin-right: clamp(40px, 10vw, 140px); flex: none; scroll-snap-align: center; text-align: center; padding: 10px 0; border-left: 1px solid #2E2D2A; border-right: 1px solid #2E2D2A"><span style="display: block; font-family: 'Geist Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: #A3A099">{{ l.code }}</span><span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(1.3rem, 2.4vw, 2rem); letter-spacing: -0.02em">{{ l.name }}</span></li>
+</sc-for>
+</ol>
+</div>
+</div>
+</section>
+
+<section class="scn s4" aria-labelledby="s4h">
+<div class="stg" style="padding: 72px clamp(16px, 4vw, 40px) 24px; gap: 24px; align-items: center">
+<h2 id="s4h" style="margin: 0; text-align: center; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(1.75rem, 1.1rem + 2.667vw, 3.5rem); line-height: 1; letter-spacing: -0.03em">The easel knows Instagram.</h2>
+<div style="position: relative; width: min(420px, 82vw); aspect-ratio: 1; background: #191917; box-shadow: inset 0 0 0 1px #2E2D2A">
+<div class="crop lk" style="{{ hero.scene }}; position: absolute; inset: 0; clip-path: inset(0 10% 0 10%)"><div style="{{ hero.sun }}"></div><div style="{{ hero.land }}"></div></div>
+</div>
+<div style="height: 1.5em; overflow: hidden; font-family: 'Geist Mono', monospace; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: #ECE9E2; text-align: center" aria-label="Crop sizes 4:5, 3:4, 1:1, 1.91:1 and 9:16">
+<div class="crl" aria-hidden="true"><div style="height: 1.5em">4:5 · Feed</div><div style="height: 1.5em">3:4 · Grid</div><div style="height: 1.5em">1:1 · Square</div><div style="height: 1.5em">1.91:1 · Landscape</div><div style="height: 1.5em">9:16 · Story</div></div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="s5h" style="max-width: 1200px; margin: 0 auto; padding: clamp(80px, 14vw, 180px) clamp(16px, 4vw, 40px)">
+<h2 id="s5h" class="rv" style="margin: 0 0 12px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(1.75rem, 1.1rem + 2.667vw, 3.5rem); line-height: 1; letter-spacing: -0.03em">The matting room.</h2>
+<p class="rv" style="margin: 0 0 48px; max-width: 46ch; color: #A3A099">White, film strip, instant, or any colour, including one picked straight from the photo with the eyedropper and loupe.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 42vw), 1fr)); gap: clamp(16px, 3vw, 40px); align-items: end">
+<sc-for list="{{ mats }}" as="m" hint-placeholder-count="4">
+<figure class="rv" style="margin: 0"><div style="{{ m.frame }}"><div class="lk" style="{{ m.p.scene }}; aspect-ratio: 4 / 5"><div style="{{ m.p.sun }}"></div><div style="{{ m.p.land }}"></div></div></div><figcaption style="margin-top: 12px; font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #A3A099">{{ m.label }}</figcaption></figure>
+</sc-for>
+</div>
+<p style="margin: 64px 0 0; font-family: 'Geist Mono', monospace; font-size: clamp(12px, 1.4vw, 15px); letter-spacing: 0.06em; color: #ECE9E2; overflow: hidden; white-space: nowrap"><span class="typed" style="display: inline-block; overflow: hidden; vertical-align: bottom">FRAME 07/36 · 35mm · f/2.0 · 1/250 · ISO 200</span></p>
+<p style="margin: 8px 0 0; font-size: 14px; color: #A3A099">Camera info borders print your camera, lens and settings under the photo.</p>
+</section>
+
+<section aria-labelledby="s7h" style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px) clamp(80px, 14vw, 180px)">
+<h2 id="s7h" class="rv" style="margin: 0 0 12px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(1.75rem, 1.1rem + 2.667vw, 3.5rem); line-height: 1; letter-spacing: -0.03em">Up to 16 on one contact sheet.</h2>
+<p class="rv" style="margin: 0 0 40px; max-width: 46ch; color: #A3A099">Pick a shape and a layout, then pinch and drag each photo into place.</p>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(4px, 0.8vw, 10px); background: #191917; padding: clamp(8px, 1.6vw, 18px); box-shadow: inset 0 0 0 1px #2E2D2A">
+<sc-for list="{{ sheet }}" as="c" hint-placeholder-count="12">
+<div class="fl lk" style="--dx: {{ c.dx }}; --rot: {{ c.rot }}; {{ c.p.scene }}; aspect-ratio: 1; {{ c.span }}"><div style="{{ c.p.sun }}"></div><div style="{{ c.p.land }}"></div></div>
+</sc-for>
+</div>
+</section>
+
+<section class="scn s8" aria-labelledby="s8h">
+<div class="stg" style="align-items: center; text-align: center; padding: 0 16px">
+<div class="door" aria-hidden="true" style="position: absolute; inset: 0; background: #191917; transform-origin: left; box-shadow: inset -1px 0 0 #2E2D2A"></div>
+<div style="position: relative">
+<p style="margin: 0 0 16px; font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #7ED9A6">House rule</p>
+<h2 id="s8h" style="margin: 0 auto; max-width: 14ch; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(2.5rem, 0.829rem + 6.857vw, 7rem); line-height: 0.95; letter-spacing: -0.04em">Nothing leaves the darkroom.</h2>
+<p style="margin: 24px auto 0; max-width: 40ch; color: #A3A099">Edits happen on your iPhone. Nothing is uploaded. No account, no ads, no tracking.</p>
+</div>
+</div>
+</section>
+
+<section id="invite" aria-labelledby="inv" style="min-height: 90svh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 96px 16px">
+<p class="rv" style="margin: 0 0 18px; font-family: 'Geist Mono', monospace; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #A3A099">Free beta · invites go out in December 2026</p>
+<h2 id="inv" class="rv" style="margin: 0 0 32px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(2.5rem, 0.829rem + 6.857vw, 7rem); line-height: 0.95; letter-spacing: -0.04em">Come in.</h2>
+<a class="vf rv" href="mailto:support@fotelier.app?subject=Fotelier%20beta%20invitation&amp;body=Please%20add%20me%20to%20the%20Fotelier%20beta.%0D%0A%0D%0AMy%20iPhone%20model%3A%20" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 500; font-size: clamp(1.3rem, 1.06rem + 1.05vw, 2rem); color: #ECE9E2">Email for an invitation <span style="color: #F0503A">→</span></a>
+<p class="rv" style="margin: 20px 0 0; font-size: 14px; color: #A3A099">Tell us your iPhone model. Opens your email app; or write to support@fotelier.app.</p>
+</section>
+</main>
+
+<footer style="border-top: 1px solid #2E2D2A; padding: 28px clamp(16px, 4vw, 40px) 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-family: 'Geist Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #A3A099">
+<span>—— fotelier ▸ © 2026 Jason Xian ——</span>
+<span style="display: flex; gap: 8px; flex-wrap: wrap"><a href="/privacy/" style="color: #A3A099; padding: 12px 6px">Privacy</a><a href="/support/" style="color: #A3A099; padding: 12px 6px">Support</a><a href="mailto:support@fotelier.app" style="color: #A3A099; padding: 12px 6px">support@fotelier.app</a></span>
+</footer>
+<p class="sr" aria-live="polite">{{ status }}</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":9000}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { comparing: false };
+this.holdStart = (e) => { if (e.button > 0) return; clearTimeout(this.t); this.t = setTimeout(() => this.setState({ comparing: true }), 180); };
+this.holdEnd = () => { clearTimeout(this.t); if (this.state.comparing) this.setState({ comparing: false }); };
+this.noMenu = (e) => e.preventDefault();
+}
+componentWillUnmount() { clearTimeout(this.t); }
+scene(sky, sun, sx, sy, sz, sunX, land, lh, landX) {
+return {
+scene: 'position: relative; overflow: hidden; background: ' + sky,
+sun: 'position: absolute; left: ' + sx + '%; top: ' + sy + '%; width: ' + sz + '%; aspect-ratio: 1; border-radius: 50%; background: ' + sun + '; ' + sunX,
+land: 'position: absolute; left: 0; right: 0; bottom: 0; height: ' + lh + '%; background: ' + land + '; ' + landX
+};
+}
+renderVals() {
+const raw = [
+['linear-gradient(180deg,#E07B5F,#F3A86B 55%,#FFD08A)', '#FFE7A0', 30, 48, 24, 'box-shadow: 0 0 0 6px rgba(255,241,168,.35)', 'linear-gradient(180deg,#3C4A78,#1F2747)', 34, ''],
+['linear-gradient(180deg,#9FB0C8,#DDE2E8)', '#FFF6C7', 66, 10, 18, '', 'radial-gradient(ellipse 20% 34% at 50% 100%,#4E3A33 0 97%,transparent 100%),linear-gradient(180deg,#C99A7E,#9C6F57)', 52, ''],
+['linear-gradient(180deg,#C9DCCB,#F4ECC8)', '#FFF2B0', 62, 22, 16, '', 'linear-gradient(180deg,#8BA65A,#55702F)', 40, 'left: -12%; right: -12%; border-radius: 70% 50% 0 0 / 40% 30% 0 0'],
+['linear-gradient(180deg,#2B2F52,#6A5A8C 55%,#D89A86)', '#FFE9B8', 70, 14, 12, '', '#16162A', 34, 'clip-path: polygon(0 45%,14% 45%,14% 18%,27% 18%,27% 52%,39% 52%,39% 0,51% 0,51% 34%,66% 34%,66% 14%,79% 14%,79% 48%,100% 48%,100% 100%,0 100%)'],
+['linear-gradient(180deg,#8EC9EC,#D4EEF8)', '#FFE7A0', 18, 14, 20, '', 'linear-gradient(170deg,#2A7FA8,#1F6A8F 50%,#E9D3A3 50.5%)', 42, ''],
+['linear-gradient(180deg,#3A3A3A,#8C8278)', '#F2E3C6', 48, 30, 14, '', 'linear-gradient(180deg,#4A3F36,#231D18)', 30, 'clip-path: polygon(0 40%,20% 30%,40% 42%,60% 26%,80% 38%,100% 30%,100% 100%,0 100%)']
+];
+const P = raw.map((a) => this.scene(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8]));
+const keyline = 'background: #191917; padding: ';
+const sheet = [];
+for (let i = 0; i < 12; i++) sheet.push({ p: P[i % 6], dx: ((i % 4) - 1.5) * 60 + 'px', rot: ((i % 3) - 1) * 6 + 'deg', span: i === 0 ? 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto' : '' });
+return {
+rootClass: 'dr' + (this.state.comparing ? ' cmp' : ''),
+status: this.state.comparing ? 'Showing originals' : '',
+holdStart: this.holdStart, holdEnd: this.holdEnd, noMenu: this.noMenu,
+prints: P, trio: [P[0], P[2], P[4]], hero: P[1], sheet: sheet,
+looks: [['00', 'Original'], ['A1', 'Warm'], ['B3', 'Mono'], ['C2', 'Fade'], ['D4', 'Chrome'], ['E1', 'Cool']].map((x) => ({ code: x[0], name: x[1] })),
+mats: [
+{ p: P[3], label: 'White', frame: 'background: #F4F1EA; padding: 8% 8% 22%' },
+{ p: P[0], label: 'Film strip', frame: 'background-color: #0A0A09; padding: 14% 5%; background-image: radial-gradient(circle, #ECE9E2 0 2.5px, transparent 3px), radial-gradient(circle, #ECE9E2 0 2.5px, transparent 3px); background-size: 14px 8px, 14px 8px; background-repeat: space no-repeat; background-position: 0 6px, 0 calc(100% - 6px); box-shadow: inset 0 0 0 1px #2E2D2A' },
+{ p: P[4], label: 'Instant', frame: 'background: #EFE8DA; padding: 7% 7% 30%' },
+{ p: P[2], label: 'Picked from the photo', frame: 'background: #8BA65A; padding: 8%' }
+]
+};
+}
+}
+</script>
+</body>
+</html>
