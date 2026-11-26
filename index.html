@@ -16,11 +16,12 @@
 <body>
 <header class="hd">
 <a class="wmk" href="#top"><span class="sr">fotelier</span><span aria-hidden="true">fotel<span class="wd">ı</span>er</span></a>
+<span class="hud" aria-hidden="true"><span class="room">01 Safelight</span><span class="tmr"><span class="dg dm"><span class="col">0<br>1<br>2<br>3<br>4<br>5<br>6</span></span>:<span class="dg dt"><span class="col">0<br>1<br>2<br>3<br>4<br>5<br>0</span></span><span class="dg do"><span class="col">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>0</span></span></span></span>
 <a class="vf hl" href="#invite">Beta · Dec</a>
 </header>
 
 <main>
-<section id="top" class="scn s1">
+<section id="top" class="scn s1" data-room="01 Safelight">
 <div class="stg">
 <div class="halo" aria-hidden="true"></div>
 <p class="mono lg">Darkroom open · an iPhone photo editor</p>
@@ -30,14 +31,14 @@
 </div>
 </section>
 
-<section class="scn s2" aria-labelledby="s2h">
+<section class="scn s2" aria-labelledby="s2h" data-room="02 Tray">
 <div class="stg">
 <div class="hrow">
 <h2 id="s2h">The whole tray develops at once.</h2>
 <p class="sub">One edit, every photo in the set. That's batch editing in Fotelier.</p>
 </div>
 <div class="fill">
-<div class="tray" aria-hidden="true">
+<div class="tray" aria-hidden="true" data-cur="Re-dip">
 <figure class="print"><div class="ph lk sc1"><span class="sun"></span><span class="land"></span></div><div class="paper"></div></figure>
 <figure class="print"><div class="ph lk sc2"><span class="sun"></span><span class="land"></span></div><div class="paper"></div></figure>
 <figure class="print"><div class="ph lk sc3"><span class="sun"></span><span class="land"></span></div><div class="paper"></div></figure>
@@ -50,14 +51,14 @@
 </div>
 </section>
 
-<section class="scn s3" aria-labelledby="s3h">
+<section class="scn s3" aria-labelledby="s3h" data-room="03 Strip">
 <div class="stg">
 <div class="hrow">
 <h2 id="s3h">Pull a new look through. Every print follows.</h2>
 <p class="sub" id="s3d">Fotelier has 30 film looks in 6 groups. The looks here are a demo. Hold a print to see the original.</p>
 </div>
 <div class="fill">
-<div class="trio">
+<div class="trio" data-cur="Hold">
 <div class="mat"><div class="ph lk sc1"><span class="sun"></span><span class="land"></span></div></div>
 <div class="mat"><div class="ph lk sc3"><span class="sun"></span><span class="land"></span></div></div>
 <div class="mat"><div class="ph lk sc5"><span class="sun"></span><span class="land"></span></div></div>
@@ -65,7 +66,7 @@
 </div>
 <div class="reel">
 <span class="index" aria-hidden="true"></span>
-<ol class="strip" tabindex="0" aria-label="Film looks">
+<ol class="strip" tabindex="0" aria-label="Film looks" data-cur="Drag">
 <li data-look="00"><span class="code">00</span> <span class="name">Original</span></li>
 <li data-look="a1"><span class="code">A1</span> <span class="name">Warm</span></li>
 <li data-look="b3"><span class="code">B3</span> <span class="name">Mono</span></li>
@@ -77,11 +78,11 @@
 </div>
 </section>
 
-<section class="scn s4" aria-labelledby="s4h">
+<section class="scn s4" aria-labelledby="s4h" data-room="04 Easel">
 <div class="stg">
 <h2 id="s4h">The easel knows Instagram.</h2>
 <div class="fill">
-<div class="easel" aria-hidden="true"><div class="ph lk sc2"><span class="sun"></span><span class="land"></span></div></div>
+<div class="easel" aria-hidden="true" data-cur="Thirds"><div class="ph lk sc2"><span class="sun"></span><span class="land"></span></div></div>
 </div>
 <div class="crl-win" aria-hidden="true"><div class="crl"><span>4:5 · Feed</span><span>3:4 · Grid</span><span>1:1 · Square</span><span>1.91:1 · Landscape</span><span>9:16 · Story</span></div></div>
 <ul class="crops sr">
@@ -94,23 +95,23 @@
 </div>
 </section>
 
-<section class="flow" aria-labelledby="s5h">
+<section class="flow" aria-labelledby="s5h" data-room="05 Mats">
 <h2 id="s5h" class="rv">The matting room.</h2>
 <p class="sub rv">White, film strip, instant, or any colour, including one picked straight from the photo with the eyedropper and loupe.</p>
 <div class="mats">
-<figure class="rv"><div class="frame f-white" aria-hidden="true"><div class="ph lk sc4"><span class="sun"></span><span class="land"></span></div></div><figcaption class="mono">White</figcaption></figure>
-<figure class="rv"><div class="frame f-film" aria-hidden="true"><div class="ph lk sc1"><span class="sun"></span><span class="land"></span></div></div><figcaption class="mono">Film strip</figcaption></figure>
-<figure class="rv"><div class="frame f-instant" aria-hidden="true"><div class="ph lk sc5"><span class="sun"></span><span class="land"></span></div></div><figcaption class="mono">Instant</figcaption></figure>
-<figure class="rv"><div class="frame f-pick"><div class="ph lk sc3 pick" data-sky="#C9DCCB #F4ECC8" data-sun="62 22 16 #FFF2B0" data-land="40 #8BA65A #55702F"><span class="sun"></span><span class="land"></span></div><div class="loupe" aria-hidden="true"></div></div><figcaption class="mono">Picked from the photo</figcaption></figure>
+<figure class="rv"><div class="frame f-white" aria-hidden="true" data-cur="Tilt"><div class="ph lk sc4"><span class="sun"></span><span class="land"></span></div></div><figcaption class="mono">White</figcaption></figure>
+<figure class="rv"><div class="frame f-film" aria-hidden="true" data-cur="Tilt"><div class="ph lk sc1"><span class="sun"></span><span class="land"></span></div></div><figcaption class="mono">Film strip</figcaption></figure>
+<figure class="rv"><div class="frame f-instant" aria-hidden="true" data-cur="Tilt"><div class="ph lk sc5"><span class="sun"></span><span class="land"></span></div></div><figcaption class="mono">Instant</figcaption></figure>
+<figure class="rv"><div class="frame f-pick"><div data-cur="Pick" class="ph lk sc3 pick" data-sky="#C9DCCB #F4ECC8" data-sun="62 22 16 #FFF2B0" data-land="40 #8BA65A #55702F"><span class="sun"></span><span class="land"></span></div><div class="loupe" aria-hidden="true"></div></div><figcaption class="mono">Picked from the photo</figcaption></figure>
 </div>
 <p class="exif"><span class="typed">FRAME 07/36 · 35mm · f/2.0 · 1/250 · ISO 200</span></p>
 <p class="note">Camera info borders print your camera, lens and settings under the photo.</p>
 </section>
 
-<section class="flow" aria-labelledby="s6h">
+<section class="flow" aria-labelledby="s6h" data-room="06 Sheet">
 <h2 id="s6h" class="rv">Up to 16 on one contact sheet.</h2>
 <p class="sub rv">Pick a shape and a layout, then pinch and drag each photo into place.</p>
-<div class="sheet" aria-hidden="true">
+<div class="sheet" aria-hidden="true" data-cur="Loupe">
 <div class="ph lk sc1 fl" style="--dx:-90px;--rot:-6deg"><span class="sun"></span><span class="land"></span></div>
 <div class="ph lk sc2 fl" style="--dx:-30px;--rot:0deg"><span class="sun"></span><span class="land"></span></div>
 <div class="ph lk sc3 fl" style="--dx:30px;--rot:6deg"><span class="sun"></span><span class="land"></span></div>
@@ -126,7 +127,30 @@
 </div>
 </section>
 
-<section class="scn s8" aria-labelledby="s8h">
+<section class="scn s7" aria-labelledby="s7h" data-room="07 Line">
+<div class="stg">
+<div class="hrow">
+<h2 id="s7h">Off the drying line.</h2>
+<p class="sub">Nine prints made in Fotelier: real exports from the app, borders and camera info included.</p>
+</div>
+<div class="fill">
+<ul class="line" tabindex="0" aria-label="Prints made in Fotelier">
+<li class="hang" style="--a:0.750" data-cur="01 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/01-eagle.webp" width="750" height="1000" alt="Bald eagle gliding across a blue evening sky; white border with 200mm f/2.8 1/387s ISO 50" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:0.926" data-cur="02 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/02-moon-branches.webp" width="926" height="1000" alt="Half moon behind bare branches at night; white border dated 2026.11.19 with 200mm f/2.8 1/121s ISO 400" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:1.909" data-cur="03 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/03-light-streaks.webp" width="1600" height="838" alt="Black-and-white blur of light streaking across a window, with an orange date stamp" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:1.552" data-cur="04 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/04-reflection.webp" width="1552" height="1000" alt="Trees and clouds reflected upside down in still water, on a cream border" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:3.791" data-cur="05 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/05-turquoise-car.webp" width="1600" height="422" alt="Turquoise sports car on a city street, in a film-strip border with an orange date stamp" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:1.000" data-cur="06 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/06-spruce.webp" width="1000" height="1000" alt="Top of a spruce silhouetted against a blue sky, square white border" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:0.837" data-cur="07 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/07-headlight.webp" width="837" height="1000" alt="Close-up of a white car’s pop-up headlight cover, white border" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:1.000" data-cur="08 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/08-moon-stripes.webp" width="1000" height="1000" alt="Half moon in a band of blue sky between dark and orange stripes, square white border" loading="lazy" decoding="async"></li>
+<li class="hang" style="--a:1.000" data-cur="09 / 09"><span class="peg" aria-hidden="true"></span><img src="/assets/img/made/09-weathervane.webp" width="1000" height="1000" alt="Arrow-shaped weathervane silhouetted against a blue sky, square white border" loading="lazy" decoding="async"></li>
+</ul>
+</div>
+<p class="cap mono">9 prints · made in Fotelier by its developer</p>
+</div>
+</section>
+
+<section class="scn s8" aria-labelledby="s8h" data-room="08 Door">
 <div class="stg">
 <div class="door" aria-hidden="true"></div>
 <div class="dc">
@@ -137,7 +161,7 @@
 </div>
 </section>
 
-<section id="invite" class="invite" aria-labelledby="inv">
+<section id="invite" class="invite" aria-labelledby="inv" data-room="09 Exit">
 <p class="mono lg rv">Free beta · invites go out in December 2026</p>
 <h2 id="inv" class="display rv">Come in.</h2>
 <a class="vf big rv" href="mailto:support@fotelier.app?subject=Fotelier%20beta%20invitation&amp;body=Please%20add%20me%20to%20the%20Fotelier%20beta.%0D%0A%0D%0AMy%20iPhone%20model%3A%20">Email for an invitation <span class="arr" aria-hidden="true">→</span></a>

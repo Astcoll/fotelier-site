@@ -322,6 +322,91 @@
     });
   })();
 
+  /* ---------- Header: which room you are in ---------- */
+  var room = d.querySelector('.room');
+  if (room && W.IntersectionObserver) {
+    var rio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var t = e.target.getAttribute('data-room');
+        if (e.isIntersecting && room.textContent !== t) room.textContent = t;
+      });
+    }, { rootMargin: '-50% 0px -50% 0px' });
+    $$('[data-room]').forEach(function (el) { rio.observe(el); });
+  }
+
+  /* ---------- Hover: peek at a look, tilt a framed print ---------- */
+  strip.addEventListener('pointerover', function (e) {
+    if (e.pointerType !== 'mouse' || drag) return;
+    var li = e.target.closest && e.target.closest('li');
+    if (li) setAttr(s3, 'data-peek', li.getAttribute('data-look'));
+  });
+  strip.addEventListener('pointerleave', function () { s3.removeAttribute('data-peek'); });
+  strip.addEventListener('pointerdown', function () { s3.removeAttribute('data-peek'); });
+
+  var mqHover = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  $$('.mats .frame:not(.f-pick)').forEach(function (fr) {
+    var r = null, tx = 0, ty = 0, q = 0;
+    function paint() { q = 0; fr.style.transform = 'perspective(700px) rotateX(' + (-ty * 7).toFixed(2) + 'deg) rotateY(' + (tx * 7).toFixed(2) + 'deg)'; }
+    fr.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && mqHover.matches) r = fr.getBoundingClientRect(); });
+    fr.addEventListener('pointermove', function (e) {
+      if (!r) return;
+      tx = (e.clientX - r.left) / r.width - 0.5; ty = (e.clientY - r.top) / r.height - 0.5;
+      if (!q) q = raf(paint);
+    });
+    fr.addEventListener('pointerleave', function () { r = null; fr.style.transform = ''; });
+  });
+
+  /* ---------- Cursor: viewfinder ring, red dot, a word for what you can do; the safelight follows ---------- */
+  var cur = null, ring, dot, lbl, glow, cx = -200, cy = -200, rx = -200, ry = -200, gx = -200, gy = -200, cq = 0, word = '', want = '', shown = false;
+  function curTick() {
+    cq = 0;
+    if (want !== word) { word = want; lbl.textContent = word; cur.classList.toggle('on', !!word); } // writes stay in the frame, never in pointer handlers
+    rx += (cx - rx) * 0.28; ry += (cy - ry) * 0.28;
+    gx += (cx - gx) * 0.09; gy += (cy - gy) * 0.09;
+    dot.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+    lbl.style.transform = ring.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px)';
+    glow.style.transform = 'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px)';
+    if (Math.abs(cx - gx) + Math.abs(cy - gy) > 0.5 || want !== word) cq = raf(curTick);
+  }
+  function curMove(e) {
+    if (e.pointerType !== 'mouse') return;
+    cx = e.clientX; cy = e.clientY;
+    if (!shown) { shown = true; rx = gx = cx; ry = gy = cy; raf(function () { cur.classList.add('vis'); glow.classList.add('vis'); }); }
+    if (!cq) cq = raf(curTick);
+  }
+  function curOver(e) {
+    var t = e.target, el = t.closest && t.closest('[data-cur],a');
+    var w = !el ? '' : el.getAttribute('data-cur') || (/^mailto:/.test(el.getAttribute('href') || '') ? 'Write' : 'Open');
+    want = w;
+    if (!cq) cq = raf(curTick);
+  }
+  function curHide(e) { if (!e.relatedTarget) { shown = false; cur.classList.remove('vis'); glow.classList.remove('vis'); } }
+  function curDown() { raf(function () { cur.classList.add('press'); }); }
+  function curUp() { raf(function () { cur.classList.remove('press'); }); }
+  function cursor() {
+    var on = mqHover.matches;
+    if (on && !cur) {
+      cur = d.createElement('div'); cur.className = 'cur'; cur.setAttribute('aria-hidden', 'true');
+      ring = d.createElement('span'); ring.className = 'ring';
+      dot = d.createElement('span'); dot.className = 'dot';
+      lbl = d.createElement('span'); lbl.className = 'lbl';
+      cur.appendChild(ring); cur.appendChild(dot); cur.appendChild(lbl);
+      glow = d.createElement('div'); glow.className = 'glow'; glow.setAttribute('aria-hidden', 'true');
+      d.body.appendChild(glow); d.body.appendChild(cur);
+    }
+    if (!cur) return;
+    root.classList.toggle('cc', on);
+    var f = on ? 'addEventListener' : 'removeEventListener';
+    d[f]('pointermove', curMove, { passive: true });
+    d[f]('pointerover', curOver);
+    d[f]('pointerout', curHide);
+    d[f]('pointerdown', curDown);
+    d[f]('pointerup', curUp);
+    if (!on) { shown = false; cur.classList.remove('vis'); glow.classList.remove('vis'); }
+  }
+  cursor();
+  listen(mqHover, cursor);
+
   mode();
   listen(mqPin, mode);
   listen(mqMo, mode);
