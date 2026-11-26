@@ -330,13 +330,19 @@
   /* ---------- Where you are: header room, rail, hint ---------- */
   var room = d.querySelector('.room'), rail = d.querySelector('.rail'), hint = d.querySelector('.hint span');
   var rooms = $$('[data-room]'), railLinks = rail ? $$('a', rail) : [];
+  var hintT = 0, lastHint = '';
   if (W.IntersectionObserver) {
     var rio = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
         var t = e.target.getAttribute('data-room');
         if (room && room.textContent !== t) room.textContent = t;
-        if (hint) hint.textContent = e.target.getAttribute('data-hint') || '';
+        if (hint && lastHint !== (e.target.getAttribute('data-hint') || '')) {
+          lastHint = e.target.getAttribute('data-hint') || '';
+          hint.textContent = e.target.getAttribute('data-hint') || '';
+          hint.parentNode.classList.add('show');
+          clearTimeout(hintT); hintT = setTimeout(function () { hint.parentNode.classList.remove('show'); }, 5200);
+        }
         railLinks.forEach(function (a) { a.classList.toggle('now', a.getAttribute('data-to') === t); });
       });
     }, { rootMargin: '-50% 0px -50% 0px' });
@@ -378,6 +384,21 @@
     fr.addEventListener('pointerleave', function () { r = null; fr.style.transform = ''; });
   });
 
+
+  mode();
+  listen(mqPin, mode);
+  listen(mqMo, mode);
+})();
+
+/* Cursor for every page (fine pointers only). Reduced motion keeps it, without lag. */
+(function () {
+  'use strict';
+  var d = document, root = d.documentElement, W = window;
+  if (!W.matchMedia) return;
+  var raf = W.requestAnimationFrame.bind(W);
+  var mqMo = matchMedia('(prefers-reduced-motion: no-preference)');
+  var mqHover = matchMedia('(hover: hover) and (pointer: fine)');
+  var listen = function (mq, f) { mq.addEventListener ? mq.addEventListener('change', f) : mq.addListener(f); };
   /* ---------- Cursor: four viewfinder corners and a red dot. Over a link the corners lock onto it;
      over anything you can use they open up and name the action. The safelight follows behind. ---------- */
   var cur = null, cns = [], dot, lbl, glow, cx = -200, cy = -200, gx = -200, gy = -200, cq = 0;
@@ -451,8 +472,4 @@
   }
   cursor();
   listen(mqHover, cursor);
-
-  mode();
-  listen(mqPin, mode);
-  listen(mqMo, mode);
 })();

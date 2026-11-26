@@ -222,7 +222,8 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 .rail,.hint{display:none}
 @media (hover:hover) and (min-width:900px){
 .js .hint{display:flex}
-.hint{position:fixed;left:28px;bottom:22px;z-index:15;margin:0;align-items:center;gap:10px;max-width:min(420px,40vw);padding:8px 10px;background:var(--scrim);font:400 11px/1.4 var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--tx);pointer-events:none}
+.hint{position:fixed;left:28px;bottom:22px;z-index:15;margin:0;align-items:center;gap:10px;max-width:min(420px,40vw);padding:8px 10px;background:var(--scrim);font:400 11px/1.4 var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--tx);pointer-events:none;opacity:0;transition:opacity .6s}
+.hint.show{opacity:1}
 .hint i{flex:none;width:6px;height:6px;background:var(--ac)}
 }
 @media (hover:hover) and (min-width:1360px){
