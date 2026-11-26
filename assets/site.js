@@ -308,6 +308,7 @@
         if (!e.isIntersecting) return;
         var t = e.target.getAttribute('data-room');
         if (room && room.textContent !== t) room.textContent = t;
+        if (root.getAttribute('data-at') !== t.slice(0, 2)) root.setAttribute('data-at', t.slice(0, 2));
         if (hint && lastHint !== (e.target.getAttribute('data-hint') || '')) {
           lastHint = e.target.getAttribute('data-hint') || '';
           hint.textContent = e.target.getAttribute('data-hint') || '';
@@ -326,7 +327,20 @@
     var H = root.scrollHeight - W.innerHeight;
     var tops = rooms.map(function (el) { return el.getBoundingClientRect().top + W.pageYOffset; });
     railLinks.forEach(function (a, i) { a.style.top = (H > 0 ? clamp(tops[i] / H, 0, 1) * 100 : 0).toFixed(2) + '%'; });
+    printEdge();
   }
+  // Edge print down the rebate, like a film's: a frame number every 360px (wide screens only).
+  var reb = d.querySelector('.reb'), mqWide = matchMedia('(min-width: 1280px)'), edgeN = 0;
+  function printEdge() {
+    if (!reb || !mqWide.matches) return;
+    var n = Math.floor(reb.offsetHeight / 360);
+    if (n === edgeN) return;
+    edgeN = n;
+    var h = '';
+    for (var i = 0; i < n; i++) h += '<span style="top:' + (i * 360 + 40) + 'px">' + (i % 3 === 1 ? 'FOTELIER 400 ' : '') + '<b>\u25B8</b> ' + (i + 1) + (i % 2 ? 'A' : '') + '</span>';
+    reb.innerHTML = h;
+  }
+  listen(mqWide, function () { edgeN = 0; printEdge(); });
   if (rail) {
     placeRail();
     if (W.ResizeObserver) new ResizeObserver(function () { if (!placeQ) placeQ = raf(placeRail); }).observe(d.body);

@@ -280,6 +280,31 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 
 /* Custom cursor: viewfinder ring, safelight-red dot, a word for what you can do; the safelight follows you */
 .cc,.cc *{cursor:none!important}
+/* The room's light. One fixed layer per room, crossfaded as you walk through; a vignette keeps the eye on the prints.
+   Without JS the safelight stays on. Identity colours only, at low alpha. */
+.amb{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.amb i{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease}
+.amb::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 120% 95% at 50% 42%,rgba(8,8,7,0) 52%,rgba(8,8,7,.6) 100%)}
+.a01{background:radial-gradient(62vmax 46vmax at 92% -10%,rgba(240,80,58,.213),rgba(240,80,58,.062) 45%,rgba(240,80,58,0) 72%),radial-gradient(70vmax 42vmax at 4% 112%,rgba(240,80,58,.088),rgba(240,80,58,0) 70%)}
+.a02{background:radial-gradient(60vmax 70vmax at -12% 46%,rgba(236,233,226,.080),rgba(236,233,226,0) 66%),radial-gradient(50vmax 60vmax at 112% 60%,rgba(240,80,58,.096),rgba(240,80,58,0) 66%)}
+.a03{background:radial-gradient(46vmax 34vmax at 50% -12%,rgba(236,233,226,.120),rgba(236,233,226,.032) 48%,rgba(236,233,226,0) 74%)}
+.a04{background:radial-gradient(90vmax 46vmax at 50% 114%,rgba(126,217,166,.128),rgba(126,217,166,.032) 50%,rgba(126,217,166,0) 72%),radial-gradient(50vmax 30vmax at 96% -6%,rgba(240,80,58,.096),rgba(240,80,58,0) 70%)}
+.a05{background:radial-gradient(30vw 150vh at 50% -42%,rgba(236,233,226,.15),rgba(236,233,226,.05) 55%,rgba(236,233,226,0) 86%),radial-gradient(40vw 22vh at 50% 78%,rgba(236,233,226,.05),rgba(236,233,226,0) 70%)}
+.a06{background:radial-gradient(22vmax 40vmax at 27% -8%,rgba(236,233,226,.096),rgba(236,233,226,0) 72%),radial-gradient(22vmax 40vmax at 73% -8%,rgba(236,233,226,.096),rgba(236,233,226,0) 72%)}
+.a07{background:radial-gradient(84vmax 42vmax at 50% 110%,rgba(236,233,226,.120),rgba(236,233,226,.032) 52%,rgba(236,233,226,0) 74%)}
+.a08{background:radial-gradient(70vmax 40vmax at 50% 112%,rgba(240,80,58,.192),rgba(240,80,58,.048) 50%,rgba(240,80,58,0) 74%)}
+html:not([data-at]) .a01,[data-at="01"] .a01,[data-at="02"] .a02,[data-at="03"] .a03,[data-at="04"] .a04,[data-at="05"] .a05,[data-at="06"] .a06,[data-at="07"] .a07,[data-at="08"] .a08,[data-at="09"] .a08{opacity:1}
+@media (prefers-reduced-motion:reduce){.amb i{transition-duration:.4s}}
+
+/* Film rebate: the page is a strip of film. It keeps moving while a room is pinned, so a scroll always shows. */
+main{position:relative}
+.reb{position:absolute;top:0;bottom:0;right:3px;z-index:-1;width:10px;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='18'%3E%3Crect x='2' y='5' width='6' height='8' rx='1.5' fill='%23191917' stroke='%232E2D2A'/%3E%3C/svg%3E") repeat-y}
+.reb span{display:none}
+@media (min-width:1280px){
+.reb{right:6px;width:42px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='30'%3E%3Crect x='24' y='8' width='12' height='15' rx='2.5' fill='%23191917' stroke='%232E2D2A'/%3E%3C/svg%3E") repeat-y}
+.reb span{display:block;position:absolute;left:2px;writing-mode:vertical-rl;font:400 10px/1 var(--fm);letter-spacing:.22em;color:var(--t2);opacity:.42;white-space:nowrap}
+.reb span b{font-weight:400;color:var(--ac)}
+}
 .cur{position:fixed;left:0;top:0;z-index:60;pointer-events:none;opacity:0;transition:opacity .25s}
 .cur.vis{opacity:1}
 .cur>span{position:fixed;left:0;top:0}
