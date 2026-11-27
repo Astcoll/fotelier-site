@@ -470,7 +470,7 @@
 
 /* Waitlist configuration. After editing, run node scripts/configure-waitlist.mjs
    to synchronize the HTML action used when JavaScript is disabled. */
-const BUTTONDOWN_USER = "REPLACE_ME";
+const BUTTONDOWN_USER = "Fotelier";
 (function () {
   'use strict';
   var form = document.querySelector('.waitlist');
