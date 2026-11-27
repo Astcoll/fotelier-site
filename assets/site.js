@@ -9,7 +9,7 @@
   root.classList.add('js');
 
   var SDA = !!(W.CSS && CSS.supports('animation-timeline: view()'));
-  var mqPin = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 520px)');
+  var mqPin = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 520px) and (min-width: 768px)');
   var mqMo = matchMedia('(prefers-reduced-motion: no-preference)');
   var $$ = function (s, c) { return Array.prototype.slice.call((c || d).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
@@ -111,7 +111,7 @@
       lis.forEach(function (li) { li.removeAttribute('aria-current'); });
       if (SDA) s3.removeAttribute('data-look');
     } else selectLook(current);
-    entries(!SDA && mqMo.matches);
+    entries(!SDA && mqPin.matches);
   }
 
   strip.addEventListener('click', function (e) {

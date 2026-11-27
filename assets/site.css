@@ -331,7 +331,7 @@ main{position:relative}
 .glow.vis{opacity:1}
 
 /* ---------- Static versions: reduced motion, and screens too short to pin ---------- */
-@media (prefers-reduced-motion:reduce),(max-height:519px){
+@media (prefers-reduced-motion:reduce),(max-height:519px),(max-width:767px){
 .easel,.crl-win{display:none}
 .crops.sr{position:static;width:100%;max-width:1000px;height:auto;margin:0;overflow:visible;clip-path:none;white-space:normal;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,40vw),1fr));gap:clamp(12px,2vw,24px)}
 .s3 .trio .ph{transition:filter .2s}
@@ -372,6 +372,7 @@ main{position:relative}
 @keyframes fly{from{opacity:0;transform:translate(var(--dx),120px) rotate(var(--rot))}to{opacity:1;transform:none}}
 
 @supports (animation-timeline:view()){
+@media (min-width:768px){
 @media (prefers-reduced-motion:no-preference) and (min-height:520px){
 .s1{height:180svh}.s2{height:280svh}.s3{height:400svh}.s4{height:280svh}.s7{height:420svh}.s8{height:200svh}
 .scn>.stg{position:sticky;top:0;height:100svh;overflow:clip;padding-top:72px;padding-bottom:24px}
@@ -421,6 +422,8 @@ main{position:relative}
 .fl{animation:fly linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
 }
 }
+
+} /* Desktop scroll-driven animations */
 
 /* ---------- JS fallback (no animation-timeline): .fb pins and reads --p (0-1) per scene ---------- */
 .fb .s1{height:180svh}.fb .s2{height:280svh}.fb .s3{height:400svh}.fb .s4{height:280svh}.fb .s7{height:420svh}.fb .s8{height:200svh}
@@ -476,3 +479,24 @@ main{position:relative}
 .hero-demo figcaption{font-size:12px;letter-spacing:.05em}
 .hero-join{position:relative;font-size:16px}
 .s1 .cue{display:none}
+
+/* Phones use normal document flow. No scroll-driven entry effects or pinning. */
+@media(max-width:767px){
+ .scn{height:auto}
+ .scn>.stg{position:relative;height:auto;min-height:0;overflow:visible;padding-top:64px;padding-bottom:40px}
+ .s1>.stg{padding-top:80px;gap:12px}
+ .s1 .wm{font-size:3.5rem}
+ .s1 .lede{font-size:1.3rem}
+ .hero-explain{font-size:16px;line-height:1.5}
+ .hero-photos{gap:8px}
+ .hero-mat{height:72px}
+ .hero-set>p{font-size:11px;letter-spacing:.05em}
+ .hero-demo figcaption{font-size:11px;letter-spacing:.02em}
+ .s8 .door{display:none}
+ .s8 .stg{background:var(--sf)}
+ .hud{display:none}
+ .lead{padding-top:28px;padding-bottom:28px}
+ .line{--ph:min(44svh,320px)}
+ .invite{min-height:0;padding:80px 20px;scroll-margin-top:64px}
+ .invite h2{margin-bottom:24px}
+}
