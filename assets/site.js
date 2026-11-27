@@ -457,34 +457,55 @@
   }
   cursor();
   listen(mqHover, cursor);
-  // Invitation: a mailto link does nothing where no email app is set up, so offer the address too
-  (function () {
-    var mail = d.querySelector('.invite .big'), row = d.querySelector('.invite .alt');
-    var cp = row && row.querySelector('.cp'), addr = row && row.querySelector('.addr');
-    if (!mail || !cp || !addr) return;
-    var text = addr.textContent, reset, status = d.getElementById('status');
-    cp.hidden = false;
-    function done() {
-      cp.textContent = 'Copied'; status.textContent = 'Address copied';
-      clearTimeout(reset); reset = setTimeout(function () { cp.textContent = 'Copy address'; if (status.textContent === 'Address copied') status.textContent = ''; }, 2000);
+
+})();
+
+/* Waitlist configuration. After editing, run node scripts/configure-waitlist.mjs
+   to synchronize the HTML action used when JavaScript is disabled. */
+const BUTTONDOWN_USER = "REPLACE_ME";
+(function () {
+  'use strict';
+  var form = document.querySelector('.waitlist');
+  if (!form) return;
+  var status = document.getElementById('waitlist-status');
+  var button = form.querySelector('button');
+  var email = form.querySelector('[name="email"]');
+  var source = new URLSearchParams(window.location.search).get('src') || '';
+  form.elements.tag.value = /^[a-z0-9-]{1,32}$/.test(source) ? source : 'direct';
+  form.action = 'https://buttondown.com/api/emails/embed-subscribe/' + encodeURIComponent(BUTTONDOWN_USER);
+  if (!window.fetch || !window.AbortController) return;
+  var pending = false;
+  form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    if (pending || !form.reportValidity()) return;
+    status.removeAttribute('data-error');
+    if (BUTTONDOWN_USER === 'REPLACE_ME') {
+      status.dataset.error = 'true';
+      status.textContent = 'The waitlist is being set up. Please use the email link below for an invitation.';
+      return;
     }
-    function pick() { var r = d.createRange(); r.selectNodeContents(addr); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
-    function legacy() { pick(); try { if (d.execCommand('copy')) done(); } catch (e) { /* the address stays selected */ } }
-    cp.addEventListener('click', function () {
-      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, legacy);
-      else legacy();
-    });
-    mail.addEventListener('click', function () {
-      var left = false;
-      function gone() { left = true; }
-      window.addEventListener('blur', gone, { once: true });
-      d.addEventListener('visibilitychange', gone, { once: true });
-      setTimeout(function () {
-        window.removeEventListener('blur', gone); d.removeEventListener('visibilitychange', gone);
-        if (left || d.hidden) return;
-        row.classList.add('nudge');
-        status.textContent = 'No email app opened. Copy the address or open Gmail.';
-      }, 1500);
-    });
-  })();
+    pending = true;
+    button.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    status.textContent = 'Sending…';
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 15000);
+    try {
+      var response = await fetch(form.action, {
+        method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' },
+        credentials: 'omit', signal: controller.signal
+      });
+      if (!response.ok) throw new Error('Request failed');
+      status.textContent = 'Check your inbox to confirm.';
+      email.value = '';
+    } catch (error) {
+      status.dataset.error = 'true';
+      status.textContent = 'We could not confirm your signup. Please try again or use the email link below.';
+    } finally {
+      clearTimeout(timer);
+      pending = false;
+      button.disabled = false;
+      form.removeAttribute('aria-busy');
+    }
+  });
 })();

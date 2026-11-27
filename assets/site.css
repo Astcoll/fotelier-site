@@ -448,3 +448,14 @@ main{position:relative}
 .io .fl:not(.in){opacity:0;transform:translateY(120px) rotate(var(--rot))}
 .io .typed{transition:clip-path 1.4s steps(44)}
 .io .typed:not(.in){clip-path:inset(0 100% 0 0)}
+
+/* Invitation: one field and a viewfinder text action. */
+.waitlist{width:min(100%,620px);text-align:left}
+.waitlist label{display:block;margin-bottom:8px;font-size:16px}
+.waitlist-row{display:flex;gap:16px;align-items:center}
+.waitlist input[type=email]{min-width:0;flex:1;min-height:52px;padding:12px;color:var(--tx);background:var(--sf);border:1px solid var(--t2);border-radius:0;font:inherit}
+.waitlist button{flex:none;min-height:52px;color:var(--tx);background:transparent;border:0;border-radius:0;font:inherit;cursor:pointer}
+.waitlist button:disabled{opacity:.6;cursor:wait}
+.waitlist-status{min-height:3.2em;margin:12px 0 0;font-size:16px}
+.waitlist-status[data-error]{color:var(--ac)}
+@media(max-width:600px){.waitlist-row{flex-direction:column;align-items:stretch;gap:8px}.waitlist button{align-self:center}.waitlist input[type=email]{width:100%;flex:auto}}
