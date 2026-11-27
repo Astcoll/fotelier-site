@@ -39,3 +39,11 @@ The browser helper failed to start with “No such file or directory”. No scre
 The fourth commit retains an unlinked diagnostic switch for the pending measurements. Use the same Chrome viewport and machine, and repeat the same scroll recording from top to bottom with no query, `?perf=grain`, `?perf=cursor` and `?perf=header`. Each variant disables exactly one feature. Record FPS and long tasks in Chrome DevTools Performance. Grain becomes static, cursor code does not initialize, and header blend becomes normal respectively. No effect was removed from the baseline without measurements. Remove the switch after completing the diagnosis and deciding the measured fix.
 
 For form screenshots, intercept only the Buttondown request in the review browser and return a successful HTTP response or an HTTP error. Clearly label these screenshots as simulated. Test a real signup separately after configuration and approval.
+
+## Claude follow-up (Fri 2026-11-27)
+- Buttondown username `fotelier` (lowercase) set; real signup through the form returned success; Buttondown showed the confirmation page. Test subscribers deleted afterwards.
+- Source tracking: tags need a paid Buttondown plan, so the form also sends `utm_source` and `referrer_url`, which show on the subscriber record on the free plan (verified: UTM source ig-bio, Referrer URL https://fotelier.app/?src=ig-bio).
+- Buttondown can answer 400 with a "Verify Your Subscription" page; the form then submits natively so Buttondown's own page handles it.
+- Desktop lag: the header's mix-blend-mode was the main cost in a headless Chrome frame test (105-117 slow frames of 361 before, 4-12 after). Header now uses a soft dark gradient instead. Perf switches removed.
+- Privacy wording approved by Jason and extended to name the page-link source.
+- Desktop hint renamed to "Scroll to look around"; the "Pick a colour" badge no longer clips on phones.

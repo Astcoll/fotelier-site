@@ -15,8 +15,6 @@ main{overflow-x:clip}
 body::after{content:"";position:fixed;inset:-128px;z-index:50;pointer-events:none;background:url(img/grain.png);opacity:.06}
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-61px,37px)}50%{transform:translate(43px,-23px)}75%{transform:translate(-19px,-71px)}100%{transform:translate(0,0)}}
 @media (prefers-reduced-motion:no-preference){body::after{animation:grain .8s steps(1,end) infinite}@view-transition{navigation:auto}}
-.perf-grain body::after{animation:none}
-.perf-header .hd{mix-blend-mode:normal}
 
 /* Type */
 h1,h2{margin:0;font-family:var(--fd);font-weight:700}
@@ -38,7 +36,7 @@ h2.display{font-size:clamp(2.5rem,.829rem + 6.857vw,7rem);line-height:.95;letter
 @media (prefers-reduced-motion:reduce){.vf::before{transition:none}}
 
 /* Header */
-.hd{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:8px var(--gut);mix-blend-mode:difference;pointer-events:none}
+.hd{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:8px var(--gut) 18px;background:linear-gradient(to bottom,rgba(13,13,12,.88),rgba(13,13,12,0));pointer-events:none}
 .hd a{pointer-events:auto;color:var(--tx)}
 .wmk{display:inline-flex;align-items:center;min-height:44px;font:600 22px/1 var(--fd);letter-spacing:-.03em;text-decoration:none;view-transition-name:wordmark}
 .hud{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:14px;font:400 11px/1 var(--fm);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;pointer-events:none}
@@ -484,6 +482,7 @@ main{position:relative}
 
 /* Phones use normal document flow. No scroll-driven entry effects or pinning. */
 @media(max-width:767px){
+ .bc-pick{left:auto;right:8px;transform:translateY(-50%)}
  .scn{height:auto}
  .scn>.stg{position:relative;height:auto;min-height:0;overflow:visible;padding-top:64px;padding-bottom:40px}
  .s1>.stg{padding-top:80px;gap:12px}

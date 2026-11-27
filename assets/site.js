@@ -1,11 +1,3 @@
-/* Temporary diagnostic switch. Compare ?perf=grain, ?perf=cursor, ?perf=header
-   with the same page without perf, recording a Chrome Performance trace each time. */
-(function () {
-  var mode = new URLSearchParams(window.location.search).get('perf');
-  if (['grain', 'cursor', 'header'].indexOf(mode) !== -1) {
-    document.documentElement.classList.add('perf-' + mode);
-  }
-})();
 /* fotelier.app: The Developing Room. No libraries, no storage, no scroll listeners.
    CSS does the scroll-driven motion; this file adds look jumps, keys, hold-to-compare, the loupe,
    and a small --p fallback for browsers without animation-timeline. */
@@ -443,7 +435,7 @@
   function curDown() { press = true; if (!cq) cq = raf(curTick); }
   function curUp() { press = false; if (!cq) cq = raf(curTick); }
   function cursor() {
-    var on = mqHover.matches && !root.classList.contains('perf-cursor');
+    var on = mqHover.matches;
     if (on && !cur) {
       cur = d.createElement('div'); cur.className = 'cur'; cur.setAttribute('aria-hidden', 'true');
       for (var i = 1; i <= 4; i++) { var c = d.createElement('span'); c.className = 'cn c' + i; cns.push(c); cur.appendChild(c); }
@@ -470,7 +462,7 @@
 
 /* Waitlist configuration. After editing, run node scripts/configure-waitlist.mjs
    to synchronize the HTML action used when JavaScript is disabled. */
-const BUTTONDOWN_USER = "Fotelier";
+const BUTTONDOWN_USER = "fotelier";
 (function () {
   'use strict';
   var form = document.querySelector('.waitlist');
@@ -479,7 +471,10 @@ const BUTTONDOWN_USER = "Fotelier";
   var button = form.querySelector('button');
   var email = form.querySelector('[name="email"]');
   var source = new URLSearchParams(window.location.search).get('src') || '';
-  form.elements.tag.value = /^[a-z0-9-]{1,32}$/.test(source) && source === source.trim() ? source : 'direct';
+  var tag = /^[a-z0-9-]{1,32}$/.test(source) && source === source.trim() ? source : 'direct';
+  form.elements.tag.value = tag; // tags need a paid Buttondown plan; utm_source and referrer_url work on any plan
+  form.elements.utm_source.value = tag;
+  form.elements.referrer_url.value = window.location.href;
   form.action = 'https://buttondown.com/api/emails/embed-subscribe/' + encodeURIComponent(BUTTONDOWN_USER);
   if (!window.fetch || !window.AbortController) return;
   var pending = false;
@@ -503,6 +498,12 @@ const BUTTONDOWN_USER = "Fotelier";
         method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' },
         credentials: 'omit', signal: controller.signal
       });
+      if (response.status === 400) {
+        // Buttondown sometimes asks the visitor to pass a quick check; let its own page handle it.
+        status.textContent = 'One more step: opening the confirmation page…';
+        form.submit();
+        return;
+      }
       if (!response.ok) throw new Error('Request failed');
       status.textContent = 'Check your inbox to confirm.';
       email.value = '';

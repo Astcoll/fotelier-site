@@ -33,9 +33,9 @@
 <a href="#door" data-to="08 Door"><b>08</b><span>Door</span></a>
 <a href="#invite" data-to="09 Exit"><b>09</b><span>Exit</span></a>
 </nav>
-<p class="hint" aria-hidden="true"><i></i><span>Scroll to develop the print</span></p>
+<p class="hint" aria-hidden="true"><i></i><span>Scroll to look around</span></p>
 <main>
-<section id="top" class="scn s1" data-room="01 Safelight" data-hint="Scroll to develop the print">
+<section id="top" class="scn s1" data-room="01 Safelight" data-hint="Scroll to look around">
 <div class="stg">
 <div class="halo" aria-hidden="true"></div>
 <p class="mono lg">Darkroom open · an iPhone photo editor</p>
@@ -212,7 +212,7 @@
 <p class="mono lg">Get an email when beta invites open</p>
 <h2 id="inv" class="display">Come in.</h2>
 <!-- Run node scripts/configure-waitlist.mjs after setting BUTTONDOWN_USER in site.js. -->
-<form class="waitlist" action="https://buttondown.com/api/emails/embed-subscribe/Fotelier" method="post" aria-describedby="waitlist-note waitlist-status">
+<form class="waitlist" action="https://buttondown.com/api/emails/embed-subscribe/fotelier" method="post" aria-describedby="waitlist-note waitlist-status">
 <label for="beta-email">Email address</label>
 <div class="waitlist-row">
 <input id="beta-email" type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required placeholder="you@example.com">
@@ -220,6 +220,8 @@
 </div>
 <input type="hidden" name="embed" value="1">
 <input type="hidden" name="tag" value="direct">
+<input type="hidden" name="utm_source" value="direct">
+<input type="hidden" name="referrer_url" value="https://fotelier.app/">
 <p id="waitlist-note" class="note">Beta invitations by email. Unsubscribe at any time.</p>
 <p id="waitlist-status" class="waitlist-status" role="status" aria-live="polite" aria-atomic="true"></p>
 </form>
