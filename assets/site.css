@@ -15,6 +15,8 @@ main{overflow-x:clip}
 body::after{content:"";position:fixed;inset:-128px;z-index:50;pointer-events:none;background:url(img/grain.png);opacity:.06}
 @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-61px,37px)}50%{transform:translate(43px,-23px)}75%{transform:translate(-19px,-71px)}100%{transform:translate(0,0)}}
 @media (prefers-reduced-motion:no-preference){body::after{animation:grain .8s steps(1,end) infinite}@view-transition{navigation:auto}}
+.perf-grain body::after{animation:none}
+.perf-header .hd{mix-blend-mode:normal}
 
 /* Type */
 h1,h2{margin:0;font-family:var(--fd);font-weight:700}
