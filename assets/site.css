@@ -357,7 +357,7 @@ main{position:relative}
 @keyframes shut{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes rise{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
 @keyframes type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
-@keyframes develop{from{opacity:0;filter:brightness(1.7) contrast(.5) sepia(.5)}to{opacity:1;filter:brightness(1) contrast(1) sepia(0)}}
+@keyframes develop{from{opacity:1;filter:brightness(1.7) contrast(.5) sepia(.5)}to{opacity:1;filter:brightness(1) contrast(1) sepia(0)}}
 @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 @keyframes fillY{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 @keyframes ride{from{transform:translateY(0)}to{transform:translateY(100%)}}
@@ -440,7 +440,7 @@ main{position:relative}
 .fb .s4 .easel .ph{transition:clip-path .25s}.fb .s4 .crl{transition:transform .25s}
 .fb .line{overflow:visible;scroll-snap-type:none;width:max-content;background-attachment:scroll;--ph:min(440px,100cqh - 70px);transform:translateX(calc((-100% + 100vw) * var(--p,0)))}
 .fb .scn>.stg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ac);transform-origin:left;transform:scaleX(var(--p,0))}
-.fb .s1 .hprint img{opacity:min(var(--p,1) / .75, 1)}
+.fb .s1 .hprint img{opacity:1}
 .fb .s8 .door{transform:scaleX(min(var(--p,1) / .55, 1))}
 /* Entry fallback (.io): JS adds .in when an element comes into view */
 .io .rv,.io .fl{transition:opacity .7s,transform .7s}
@@ -459,3 +459,20 @@ main{position:relative}
 .waitlist-status{min-height:3.2em;margin:12px 0 0;font-size:16px}
 .waitlist-status[data-error]{color:var(--ac)}
 @media(max-width:600px){.waitlist-row{flex-direction:column;align-items:stretch;gap:8px}.waitlist button{align-self:center}.waitlist input[type=email]{width:100%;flex:auto}}
+
+/* First screen: readable copy and the same three photographs before and after. */
+.s1 .stg{gap:12px}
+.s1 .lg{margin:0}
+.s1 .wm{font-size:clamp(3.5rem,7vw,6rem)}
+.s1 .lede{margin:4px 0 0}
+.hero-explain{position:relative;max-width:48ch;margin:0;color:var(--t2)}
+.hero-demo{position:relative;width:min(100%,600px);margin:0;display:grid;gap:10px}
+.hero-set>p{margin:0 0 6px;font-size:12px}
+.hero-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.hero-mat{height:clamp(60px,11svh,110px);overflow:hidden;box-shadow:inset 0 0 0 1px var(--key)}
+.hero-mat img{display:block;width:100%;height:100%;object-fit:cover}
+.hero-set.edited .hero-mat{padding:5px;background:#F4F1EA}
+.hero-set.edited img{filter:sepia(.42) grayscale(0) saturate(1.18) contrast(1.04) brightness(1.01) hue-rotate(-4deg)}
+.hero-demo figcaption{font-size:12px;letter-spacing:.05em}
+.hero-join{position:relative;font-size:16px}
+.s1 .cue{display:none}
