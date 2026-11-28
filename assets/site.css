@@ -502,4 +502,4 @@ main{position:relative}
  .invite h2{margin-bottom:24px}
 }
 
-.ig{display:flex;gap:20px;align-items:center;justify-content:center;max-width:560px;margin:20px auto 0;text-align:left}.ig .note{margin:0;max-width:34ch}.qr{flex:none;width:112px;height:112px;border-radius:6px}@media(hover:none){.qr{display:none}}@media(max-width:600px){.ig{text-align:center}}
+.ig{display:flex;gap:20px;align-items:center;justify-content:center;max-width:560px;margin:20px auto 0;text-align:left}.ig .note{margin:0;max-width:34ch}@media(max-width:600px){.ig{text-align:center}}
