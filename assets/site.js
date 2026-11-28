@@ -11,6 +11,8 @@
   var SDA = !!(W.CSS && CSS.supports('animation-timeline: view()'));
   var mqPin = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 520px) and (min-width: 768px)');
   var mqMo = matchMedia('(prefers-reduced-motion: no-preference)');
+  var mqPhone = matchMedia('(prefers-reduced-motion: no-preference) and (min-height: 520px) and (max-width: 767px)');
+  var pinned = function () { return mqPin.matches || (SDA && mqPhone.matches); }; // phones pin the looks scene only with CSS timelines
   var $$ = function (s, c) { return Array.prototype.slice.call((c || d).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   var raf = W.requestAnimationFrame.bind(W);
@@ -85,7 +87,7 @@
     io2 = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -8% 0px' });
-    $$('.rv,.typed,.fl').forEach(function (el) { io2.observe(el); });
+    $$('.rv,.typed,.fl,.rack .cv>span,.tray .print').forEach(function (el) { io2.observe(el); });
   }
 
   /* ---------- Looks row: all six on screen; scroll lights them in turn, click or tap jumps ---------- */
@@ -108,27 +110,29 @@
     });
   }
   // Pinned: scroll the page to the middle of that look's hold, so prints, highlight and playhead agree.
+  // Phones run the same keyframes over entry 70% to exit 30% of their shorter scene.
   function jumpTo(i) {
-    var g = geo(s3);
-    W.scrollTo({ top: g.top + (0.0548 + 0.1814 * i) * g.range, behavior: mqMo.matches ? 'smooth' : 'auto' });
+    var g = geo(s3), p = 0.0548 + 0.1814 * i, v = root.clientHeight;
+    var top = mqPin.matches ? g.top + p * g.range : g.top - 0.3 * v + p * (s3.offsetHeight - 0.4 * v);
+    W.scrollTo({ top: top, behavior: mqMo.matches ? 'smooth' : 'auto' });
   }
 
   function mode() {
     if (!SDA) { if (mqPin.matches) startFb(); else stopFb(); }
     setChecked(current);
-    strip.setAttribute('data-cur', mqPin.matches ? 'Jump' : 'Choose');
-    if (mqPin.matches) {
+    strip.setAttribute('data-cur', pinned() ? 'Jump' : 'Choose');
+    if (pinned()) {
       lis.forEach(function (li) { li.removeAttribute('aria-current'); });
       if (SDA) s3.removeAttribute('data-look');
     } else selectLook(current);
-    entries(!SDA && mqPin.matches);
+    entries(!SDA && (mqPin.matches || mqPhone.matches));
   }
 
   strip.addEventListener('click', function (e) {
     var li = e.target.closest && e.target.closest('li');
     if (!li) return;
     did('look');
-    if (mqPin.matches) { current = li.getAttribute('data-look'); setChecked(current); jumpTo(LOOKS.indexOf(current)); }
+    if (pinned()) { current = li.getAttribute('data-look'); setChecked(current); jumpTo(LOOKS.indexOf(current)); }
     else selectLook(li.getAttribute('data-look'));
   });
 
@@ -142,7 +146,7 @@
     e.preventDefault();
     did('look');
     to = clamp(to, 0, LOOKS.length - 1);
-    if (mqPin.matches) { current = LOOKS[to]; setChecked(current); jumpTo(to); }
+    if (pinned()) { current = LOOKS[to]; setChecked(current); jumpTo(to); }
     else selectLook(LOOKS[to]);
     lis[to].focus({ preventScroll: true });
   });
@@ -389,6 +393,7 @@
   mode();
   listen(mqPin, mode);
   listen(mqMo, mode);
+  listen(mqPhone, mode);
 })();
 
 /* Cursor for every page (fine pointers only). Reduced motion keeps it, without lag. */

@@ -503,3 +503,115 @@ main{position:relative}
 }
 
 .ig{display:flex;gap:20px;align-items:center;justify-content:center;max-width:560px;margin:20px auto 0;text-align:left}.ig .note{margin:0;max-width:34ch}@media(max-width:600px){.ig{text-align:center}}
+
+/* ---------- Phones: motion made for a thumb. In-flow reveals, one short pin, collages on a swipeable rack.
+   Desktop rules above are untouched; reduced motion and short screens keep the static flow. ---------- */
+.rack,.c16{display:contents}
+@keyframes pin{from{opacity:0;transform:translateY(16px)}}
+@media (max-width:767px) and (min-height:520px) and (prefers-reduced-motion:no-preference){
+.s1 .stg>:not(.halo){animation:pin .7s cubic-bezier(.2,.7,.2,1) both}
+.s1 .stg>.wm{animation-delay:.08s}.s1 .stg>.lede{animation-delay:.16s}.s1 .stg>.hero-explain{animation-delay:.24s}.s1 .stg>.hero-demo{animation-delay:.32s}.s1 .stg>.hero-join{animation-delay:.4s}
+.tray{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* Room to breathe: the easel, the collages and the house rule each get a screen; bigger prints on the line */
+.s4>.stg,.s8>.stg{min-height:100svh}
+#sheet{min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+.line{--ph:min(50svh,380px)}
+
+/* Seven collages side by side: swipe across, each snaps into place */
+.rack{--h:min(84vw,46svh,360px);display:flex;align-items:flex-end;gap:14px;margin:0 calc(var(--gut) * -1);padding:24px var(--gut) 8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);scrollbar-width:none}
+.rack::-webkit-scrollbar{display:none}
+.rack .cols{display:contents}
+.c16{display:block}
+.rack .col,.c16{flex:none;width:min-content;scroll-snap-align:start}
+.rack .cv{height:var(--h)}
+.rack .c2 .cv,.rack .c5 .cv{width:calc(var(--h) * .8)}.rack .c3 .cv{width:calc(var(--h) * .5625)}.rack .c4 .cv,.rack .c6 .cv,.rack .c9 .cv{width:var(--h)}
+.c16 .sheet{width:var(--h);height:var(--h);grid-template-rows:repeat(4,minmax(0,1fr));gap:3px;padding:6px}
+.c16 .sheet .ph{aspect-ratio:auto}
+.c16 .sheet-cap{margin-top:10px}
+/* Fallback without animation-timeline: JS adds .in once, one-shot transitions */
+.io .rack .rv{opacity:1;transform:none;transition:none}
+.io .rack .cv>span,.io .c16 .ph{transition:opacity .5s,transform .7s cubic-bezier(.2,.75,.25,1)}
+.io .rack .cv>span:not(.in),.io .c16 .ph:not(.in){opacity:0;transform:translate(10px,36px) rotate(3deg) scale(.92)}
+.io .rack .cv>span:nth-child(even):not(.in),.io .c16 .ph:nth-child(even):not(.in){transform:translate(-10px,42px) rotate(-3deg) scale(.92)}
+.io .rack .cv>span:nth-child(2),.io .c16 .ph:nth-child(2){transition-delay:0.04s}
+.io .rack .cv>span:nth-child(3),.io .c16 .ph:nth-child(3){transition-delay:0.08s}
+.io .rack .cv>span:nth-child(4),.io .c16 .ph:nth-child(4){transition-delay:0.12s}
+.io .rack .cv>span:nth-child(5),.io .c16 .ph:nth-child(5){transition-delay:0.16s}
+.io .rack .cv>span:nth-child(6),.io .c16 .ph:nth-child(6){transition-delay:0.20s}
+.io .rack .cv>span:nth-child(7),.io .c16 .ph:nth-child(7){transition-delay:0.24s}
+.io .rack .cv>span:nth-child(8),.io .c16 .ph:nth-child(8){transition-delay:0.28s}
+.io .rack .cv>span:nth-child(9),.io .c16 .ph:nth-child(9){transition-delay:0.32s}
+.io .c16 .ph:nth-child(10){transition-delay:0.36s}
+.io .c16 .ph:nth-child(11){transition-delay:0.40s}
+.io .c16 .ph:nth-child(12){transition-delay:0.44s}
+.io .c16 .ph:nth-child(13){transition-delay:0.48s}
+.io .c16 .ph:nth-child(14){transition-delay:0.52s}
+.io .c16 .ph:nth-child(15){transition-delay:0.56s}
+.io .c16 .ph:nth-child(16){transition-delay:0.60s}
+.io .s2 .paper{transition:opacity 1.2s .15s}
+.io .s2 .print:not(.in) .paper{opacity:1}
+}
+
+@keyframes pup{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes ta{0%{opacity:0;transform:translate(-14px,36px) rotate(-4deg) scale(.92)}45%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes tb{0%{opacity:0;transform:translate(12px,42px) rotate(3deg) scale(.92)}45%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes tc{0%{opacity:0;transform:translate(-8px,48px) rotate(2deg) scale(.92)}45%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes td{0%{opacity:0;transform:translate(16px,30px) rotate(-3deg) scale(.92)}45%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes ts{from{translate:44px -6px;rotate:2deg;scale:.94}}
+@keyframes ts2{from{translate:36px 10px;rotate:-2deg;scale:.94}}
+@supports (animation-timeline:view()){
+@media (max-width:767px) and (min-height:520px) and (prefers-reduced-motion:no-preference){
+/* Light reveals: a short rise as each block enters */
+.scn .hrow>*,.s4 h2,.s4 .crl-win,.scn .cap,.s7 .line,.rv,.dc>*,.invite>.mono,.invite>h2{animation:pup linear both;animation-timeline:view();animation-range:entry 10% cover 30%}
+.rack .rv{animation:none}
+.lead{view-timeline:--ld}
+.lead::before{animation:grow linear both;animation-timeline:--ld;animation-range:entry 10% cover 55%}
+.lead span{animation:pup linear both;animation-timeline:--ld;animation-range:entry 40% cover 60%}
+.typed{animation:type steps(44) both;animation-timeline:view();animation-range:entry 40% cover 45%}
+/* Looks: the one pin, 140svh. A look changes as you scroll; tap a look to jump there */
+.s3{height:140svh;view-timeline:--t3}
+.s3>.stg{position:sticky;top:0;height:100svh;overflow:clip;padding-top:64px;padding-bottom:20px}
+.s3 .fill{flex:1 1 0;min-height:0;container-type:size}
+.s3 .trio{width:min(760px,100% - 32px,240cqh + 30px)}
+.s3 .track{display:block}
+.s3 .trio .ph{animation:looks linear both}
+.s3 .ride{animation:rideX linear both}
+.s3 .strip li::before{animation:mk0 linear both}.s3 .strip li:nth-child(2)::before{animation-name:mk1}.s3 .strip li:nth-child(3)::before{animation-name:mk2}
+.s3 .strip li:nth-child(4)::before{animation-name:mk3}.s3 .strip li:nth-child(5)::before{animation-name:mk4}.s3 .strip li:nth-child(6)::before{animation-name:mk5}
+.s3 .trio .ph,.s3 .ride,.s3 .strip li::before{animation-timeline:--t3;animation-range:entry 70% exit 30%}
+/* Tray: each print develops as it rises */
+.s2 .print{animation:pup linear both;animation-timeline:view();animation-range:entry 0% entry 70%}
+.s2 .paper{animation:dev linear both;animation-timeline:view();animation-range:entry 40% cover 45%}
+.s2 .print:nth-child(even) .paper{animation-range:entry 80% cover 55%}
+/* Easel: the crop steps through the five formats as the room passes, no pin */
+.easel,.crl-win{display:block}
+.crops.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;display:block}
+.s4{view-timeline:--t4}
+.s4 .easel .ph{animation:easel linear both}
+.s4 .crl{animation:crlab linear both}
+.s4 .easel .ph,.s4 .crl{animation-timeline:--t4;animation-range:cover 30% cover 75%}
+/* Collages: tiles fly in and snap together as the rack rises; swiping a layout in assembles it again */
+.rack{view-timeline:--rk}
+.rack .col,.c16{view-timeline:--cd inline}
+.rack .cv>span,.c16 .ph{animation:ta cubic-bezier(.25,.45,.3,1) both,ts cubic-bezier(.25,.45,.3,1) both;animation-timeline:--rk,--cd}
+.rack .cv>span:nth-child(4n+2),.c16 .ph:nth-child(4n+2){animation-name:tb,ts2}
+.rack .cv>span:nth-child(4n+3),.c16 .ph:nth-child(4n+3){animation-name:tc,ts}
+.rack .cv>span:nth-child(4n),.c16 .ph:nth-child(4n){animation-name:td,ts2}
+.rack .cv>span:nth-child(1),.c16 .ph:nth-child(1){animation-range:entry 30% cover 50%,entry 0% entry 100%}
+.rack .cv>span:nth-child(2),.c16 .ph:nth-child(2){animation-range:entry 34% cover 51%,entry 3% entry 100%}
+.rack .cv>span:nth-child(3),.c16 .ph:nth-child(3){animation-range:entry 38% cover 52%,entry 6% entry 100%}
+.rack .cv>span:nth-child(4),.c16 .ph:nth-child(4){animation-range:entry 42% cover 53%,entry 9% entry 100%}
+.rack .cv>span:nth-child(5),.c16 .ph:nth-child(5){animation-range:entry 46% cover 54%,entry 12% entry 100%}
+.rack .cv>span:nth-child(6),.c16 .ph:nth-child(6){animation-range:entry 50% cover 55%,entry 15% entry 100%}
+.rack .cv>span:nth-child(7),.c16 .ph:nth-child(7){animation-range:entry 54% cover 56%,entry 18% entry 100%}
+.rack .cv>span:nth-child(8),.c16 .ph:nth-child(8){animation-range:entry 58% cover 57%,entry 21% entry 100%}
+.rack .cv>span:nth-child(9),.c16 .ph:nth-child(9){animation-range:entry 62% cover 58%,entry 24% entry 100%}
+.c16 .ph:nth-child(10){animation-range:entry 66% cover 59%,entry 27% entry 100%}
+.c16 .ph:nth-child(11){animation-range:entry 70% cover 60%,entry 30% entry 100%}
+.c16 .ph:nth-child(12){animation-range:entry 74% cover 61%,entry 33% entry 100%}
+.c16 .ph:nth-child(13){animation-range:entry 78% cover 62%,entry 36% entry 100%}
+.c16 .ph:nth-child(14){animation-range:entry 82% cover 63%,entry 39% entry 100%}
+.c16 .ph:nth-child(15){animation-range:entry 86% cover 64%,entry 42% entry 100%}
+.c16 .ph:nth-child(16){animation-range:entry 90% cover 65%,entry 45% entry 100%}
+}
+} /* Phone scroll-driven animations */
