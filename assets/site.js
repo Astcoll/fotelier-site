@@ -90,8 +90,17 @@
 
   /* ---------- Looks row: all six on screen; scroll lights them in turn, click or tap jumps ---------- */
   var current = 'a1';
+  // Radio semantics for assistive tech and keyboard: one tab stop, arrows move and select.
+  function setChecked(code) {
+    lis.forEach(function (li) {
+      var on = li.getAttribute('data-look') === code;
+      li.setAttribute('aria-checked', on ? 'true' : 'false');
+      li.tabIndex = on ? 0 : -1;
+    });
+  }
   function selectLook(code) {
     current = code;
+    setChecked(code);
     s3.setAttribute('data-look', code);
     lis.forEach(function (li) {
       if (li.getAttribute('data-look') === code) li.setAttribute('aria-current', 'true');
@@ -106,6 +115,7 @@
 
   function mode() {
     if (!SDA) { if (mqPin.matches) startFb(); else stopFb(); }
+    setChecked(current);
     strip.setAttribute('data-cur', mqPin.matches ? 'Jump' : 'Choose');
     if (mqPin.matches) {
       lis.forEach(function (li) { li.removeAttribute('aria-current'); });
@@ -118,17 +128,23 @@
     var li = e.target.closest && e.target.closest('li');
     if (!li) return;
     did('look');
-    if (mqPin.matches) jumpTo(LOOKS.indexOf(li.getAttribute('data-look')));
+    if (mqPin.matches) { current = li.getAttribute('data-look'); setChecked(current); jumpTo(LOOKS.indexOf(current)); }
     else selectLook(li.getAttribute('data-look'));
   });
 
   strip.addEventListener('keydown', function (e) {
-    var dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-    if (!dir) return;
+    var k = e.key, i = LOOKS.indexOf(current), to;
+    if (k === 'ArrowRight' || k === 'ArrowDown') to = i + 1;
+    else if (k === 'ArrowLeft' || k === 'ArrowUp') to = i - 1;
+    else if (k === 'Home') to = 0;
+    else if (k === 'End') to = LOOKS.length - 1;
+    else return;
     e.preventDefault();
     did('look');
-    if (mqPin.matches) jumpTo(clamp(Math.round((geo(s3).p - 0.0548) / 0.1814) + dir, 0, 5));
-    else selectLook(LOOKS[clamp(LOOKS.indexOf(current) + dir, 0, 5)]);
+    to = clamp(to, 0, LOOKS.length - 1);
+    if (mqPin.matches) { current = LOOKS[to]; setChecked(current); jumpTo(to); }
+    else selectLook(LOOKS[to]);
+    lis[to].focus({ preventScroll: true });
   });
 
   /* ---------- Hold to compare ---------- */
