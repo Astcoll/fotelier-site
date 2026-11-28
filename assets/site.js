@@ -110,10 +110,11 @@
     });
   }
   // Pinned: scroll the page to the middle of that look's hold, so prints, highlight and playhead agree.
-  // Phones run the same keyframes over entry 70% to exit 30% of their shorter scene.
+  // Phones hold each look longer (@keyframes plooks) over entry 85% to exit 15% of their scene.
   function jumpTo(i) {
-    var g = geo(s3), p = 0.0548 + 0.1814 * i, v = root.clientHeight;
-    var top = mqPin.matches ? g.top + p * g.range : g.top - 0.3 * v + p * (s3.offsetHeight - 0.4 * v);
+    var g = geo(s3), v = root.clientHeight;
+    var top = mqPin.matches ? g.top + (0.0548 + 0.1814 * i) * g.range
+      : g.top - 0.15 * v + (0.05835 + 0.17665 * i) * (s3.offsetHeight - 0.7 * v);
     W.scrollTo({ top: top, behavior: mqMo.matches ? 'smooth' : 'auto' });
   }
 
